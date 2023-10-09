@@ -51,21 +51,30 @@ const TrelloCardDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const formattedDate = card.due ? new Date(card.due).toLocaleDateString() : '';
+
   return (
     <div>
-      <Link to="/trello" style={{ textDecoration: 'none', color: 'black' }}>
-        <h1 style={{ display: 'inline-block' }}>Trello</h1>
-      </Link>
-      <br />
-      <Link to={`/trello/${card.idBoard}`} style={{ textDecoration: 'none', color: 'black' }}>
-        <h1 style={{ display: 'inline-block' }}>{boardName}</h1>
-      </Link>
-      <h1>{card.name}</h1>
-      <p>Description:</p>
-      <textarea value={description} onChange={handleDescriptionChange} />
-      <br />
-      <button onClick={updateCardDescription}>Save</button>
-      <p>Due: {card.due}</p>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ margin: '10px' }}>
+          <Link to="/trello" style={{ textDecoration: 'none', color: 'black' }}>
+            <h1 style={{ display: 'inline-block' }}>Trello</h1>
+          </Link>
+        </div>
+        <div style={{ margin: '10px' }}>
+        <Link to={`/trello/${boardId}`} style={{ textDecoration: 'none', color: 'black' }}>
+            <h1 style={{ display: 'inline-block' }}>{boardName}</h1>
+          </Link>
+        </div>
+      </div>
+      <div style={{ margin: '10px' }}>
+        <h2>{card.name}</h2>
+        <p>Description:</p>
+        <textarea value={description} onChange={handleDescriptionChange} />
+        <br />
+        <button onClick={updateCardDescription}>Save</button>
+        <p>Due: {formattedDate}</p>
+      </div>
     </div>
   );
 }

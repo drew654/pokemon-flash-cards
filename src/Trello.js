@@ -18,7 +18,7 @@ const Trello = () => {
   }
 
   return (
-    <div>
+    <div style={{ margin: '10px' }}>
       <h1>Trello</h1>
       <ul>
         {boards.map(board => (

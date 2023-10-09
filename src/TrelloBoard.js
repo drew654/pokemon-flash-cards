@@ -42,15 +42,23 @@ const TrelloBoard = () => {
 
   return (
     <div>
-      <Link to="/trello" style={{ textDecoration: 'none', color: 'black' }}>
-        <h1 style={{ display: 'inline-block' }}>Trello</h1>
-      </Link>
-      <h1>{board.name}</h1>
-      <p>{board.desc}</p>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ margin: '10px' }}>
+          <Link to="/trello" style={{ textDecoration: 'none', color: 'black' }}>
+            <h1 style={{ display: 'inline-block' }}>Trello</h1>
+          </Link>
+        </div>
+        <div style={{ margin: '10px' }}>
+          <h1>{board.name}</h1>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto', margin: '10px' }}>
         {columns.map(column => (
           <div key={column.id} style={{ marginRight: '20px' }}>
-            <h2>{column.name}</h2>
+            <div style={{ width: '200px' }}>
+              <h2>{column.name}</h2>
+            </div>
             {column.cards.map(card => (
               <div key={card.id}>
                 <TrelloCard board={board} card={card} />
