@@ -2,8 +2,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import About from './About';
-import TrelloBoards from './TrelloBoards';
+import Trello from './Trello';
 import TrelloBoard from './TrelloBoard';
+import TrelloCardDetails from './TrelloCardDetails';
 
 const App = () => {
   return (
@@ -11,8 +12,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="trello-boards" element={<TrelloBoards />} />
-        <Route path="/trello-board/:boardId" element={<TrelloBoard />} />
+        <Route path="/trello" element={<Trello />} />
+        <Route path="/trello/:boardId" element={<TrelloBoard />} />
+        <Route path="/trello/:boardId/:cardId" element={<TrelloCardDetails />} />
       </Routes>
     </BrowserRouter>
   );

@@ -41,7 +41,7 @@ const TrelloBoard = () => {
 
   return (
     <div>
-      <Link to="/trello-boards" style={{ textDecoration: 'none', color: 'black' }}>
+      <Link to="/trello" style={{ textDecoration: 'none', color: 'black' }}>
         <h1 style={{ display: 'inline-block' }}>Trello</h1>
       </Link>
       <h1>{board.name}</h1>
@@ -51,7 +51,10 @@ const TrelloBoard = () => {
           <h2>{column.name}</h2>
           {column.cards.map(card => (
             <div key={card.id}>
-              <p>{card.name}</p>
+              <Link to={`/trello/${board.id}/${card.id}`} style={{ textDecoration: 'none', color: 'black' }}>
+                <h3>{card.name}</h3>
+                <p>{card.desc}</p>
+              </Link>
             </div>
           ))}
         </div>

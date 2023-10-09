@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from './config';
 
-const TrelloBoards = () => {
+const Trello = () => {
   const [boards, setBoards] = useState([]);
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const TrelloBoards = () => {
   }, []);
 
   const handleBoardClick = (boardId) => {
-    navigate(`/trello-board/${boardId}`);
+    navigate(`/trello/${boardId}`);
   }
 
   return (
@@ -29,4 +29,4 @@ const TrelloBoards = () => {
   );
 }
 
-export default TrelloBoards;
+export default Trello;
