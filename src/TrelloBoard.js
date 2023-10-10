@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import config from './config';
 import { Link } from 'react-router-dom';
-import TrelloCard from './TrelloCard';
+import TrelloColumn from './TrelloColumn';
 
 const TrelloBoard = () => {
   const { boardId } = useParams();
@@ -56,14 +56,7 @@ const TrelloBoard = () => {
       <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto', margin: '10px' }}>
         {columns.map(column => (
           <div key={column.id} style={{ marginRight: '20px' }}>
-            <div style={{ width: '200px' }}>
-              <h2>{column.name}</h2>
-            </div>
-            {column.cards.map(card => (
-              <div key={card.id}>
-                <TrelloCard board={board} card={card} />
-              </div>
-            ))}
+            <TrelloColumn board={board} column={column} />
           </div>
         ))}
       </div>

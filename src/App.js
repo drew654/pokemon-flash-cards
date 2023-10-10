@@ -5,6 +5,8 @@ import About from './About';
 import Trello from './Trello';
 import TrelloBoard from './TrelloBoard';
 import TrelloCardDetails from './TrelloCardDetails';
+import Canvas from './Canvas';
+import CanvasCourse from './CanvasCourse';
 
 const App = () => {
   return (
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/trello" element={<Trello />} />
         <Route path="/trello/:boardId" element={<TrelloBoard />} />
         <Route path="/trello/:boardId/:cardId" element={<TrelloCardDetails />} />
+        <Route path="/canvas" element={<Canvas />} />
+        <Route path="/canvas/:courseId" element={<CanvasCourse />} />
       </Routes>
     </BrowserRouter>
   );
