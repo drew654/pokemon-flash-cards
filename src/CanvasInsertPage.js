@@ -5,6 +5,7 @@ const CanvasInsertPage = () => {
   const [text, setText] = useState('');
   const [assignments, setAssignments] = useState([]);
   const [trelloAssignments, setTrelloAssignments] = useState([]);
+  const [successfulCardAdds, setSuccessfulCardAdds] = useState([]);
 
   const setPastedAssignments = () => {
     setAssignments([]);
@@ -35,7 +36,10 @@ const CanvasInsertPage = () => {
     const url = `https://api.trello.com/1/cards?key=${key}&token=${token}&idList=${listId}&name=${name}&due=${due}`;
     fetch(url, { method: 'POST' })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data);
+        setSuccessfulCardAdds(prevState => [...prevState, data.name]);
+      })
       .catch(error => console.error(error));
   };
 
@@ -56,9 +60,9 @@ const CanvasInsertPage = () => {
   };
 
   const importToTrello = () => {
+    setSuccessfulCardAdds([]);
     const newCards = assignments.filter(assignment => !trelloAssignments.includes(assignment.name));    
     newCards.forEach(assignment => {
-      console.log(assignment.name);
       createCard(listId, encodeURIComponent(assignment.name), assignment.dueDate, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN);
     });
   };
@@ -77,27 +81,29 @@ const CanvasInsertPage = () => {
 
   return (
     <div>
-      <textarea value={text} onChange={(event) => setText(event.target.value)} />
+      <textarea value={text} onChange={(event) => setText(event.target.value)} rows={10} cols={50} />
       <br />
-      <button type="button" onClick={() => setPastedAssignments()}>Insert into {courseName}</button>
+      <button type="button" onClick={() => setPastedAssignments()}>Preview Changes</button>
 
       <table>
         <tbody>
           {assignments.map((assignment) => {
             const inTrello = trelloAssignments.includes(assignment.name);
+            const addedToTrello = successfulCardAdds.includes(assignment.name);
             return (
-              <tr style={{backgroundColor: inTrello ? '' : '#d4edda'}}>
-                <td>{assignment.name}</td>
-                <td>{assignment.dueDate}</td>
+              <tr style={{backgroundColor: (inTrello || addedToTrello) ? '' : '#d4edda'}}>
+                <td>{assignment.name}{addedToTrello}</td>
+                <td>{new Date(assignment.dueDate).toLocaleString()}</td>
+                {addedToTrello ? <td>Added to Trello</td> : null}
               </tr>
             );
           })}
         </tbody>
       </table>
 
-      <button type="button" onClick={() => importToTrello()}>Import to Trello</button>
+      <button type="button" onClick={() => importToTrello()}>Send to {courseName}</button>     
       <button type="button" onClick={() => deleteAllCardsInList(listId, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN)}>Delete all cards in {courseName}</button>
-    </div>
+      </div>
   );
 };
 
