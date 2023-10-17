@@ -7,7 +7,7 @@ const TrelloColumn = ({ board, column }) => {
     <div>
       <div style={{ display: 'flex', flexDirection: 'row', width: '200px', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2 style={{ marginRight: '10px' }}>{column.name}</h2>
-        <ImportFromCanvas courseName={column.name} />
+        <ImportFromCanvas courseName={column.name} listId={column.id} />
       </div>
       {column.cards.map(card => (
         <div key={card.id}>
