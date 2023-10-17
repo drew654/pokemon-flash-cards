@@ -4,12 +4,7 @@ import config from './config';
 const CanvasInsertPage = () => {
   const [text, setText] = useState('');
   const [assignments, setAssignments] = useState([]);
-  
-  const addAssignment = (line) => {
-    const a = assignments;
-    a.push(line);
-    setAssignments(a);
-  };
+  const [trelloAssignments, setTrelloAssignments] = useState([]);
 
   const setPastedAssignments = () => {
     setAssignments([]);
@@ -31,7 +26,9 @@ const CanvasInsertPage = () => {
       a.push(assignment);
     });  
     
+    a.shift();
     setAssignments(a);
+    getCardNamesInList(listId, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN).then(cards => setTrelloAssignments(cards));
   }
 
   const createCard = (listId, name, due, key, token) => {
@@ -64,6 +61,14 @@ const CanvasInsertPage = () => {
     });
   };
 
+  const getCardNamesInList = (listId, key, token) => {
+    const url = `https://api.trello.com/1/lists/${listId}/cards?key=${key}&token=${token}`;
+    return fetch(url)
+      .then(response => response.json())
+      .then(cards => cards.map(card => card.name))
+      .catch(error => console.error(error));
+  };
+
   const searchParams = new URLSearchParams(window.location.search);
   const courseName = searchParams.get('courseName');
   const listId = searchParams.get('listId');
@@ -76,13 +81,15 @@ const CanvasInsertPage = () => {
 
       <table>
         <tbody>
-          {assignments.map((assignment) => (
-            console.log(assignment.dueDate),
-            <tr>
-              <td>{assignment.name}</td>
-              <td>{assignment.dueDate}</td>
-            </tr>
-          ))}
+          {assignments.map((assignment) => {
+            const inTrello = trelloAssignments.includes(assignment.name);
+            return (
+              <tr style={{backgroundColor: inTrello ? '' : '#d4edda'}}>
+                <td>{assignment.name}</td>
+                <td>{assignment.dueDate}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
