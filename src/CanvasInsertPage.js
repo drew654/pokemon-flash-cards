@@ -56,8 +56,10 @@ const CanvasInsertPage = () => {
   };
 
   const importToTrello = () => {
-    assignments.forEach(assignment => {
-      createCard(listId, assignment.name, assignment.dueDate, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN);
+    const newCards = assignments.filter(assignment => !trelloAssignments.includes(assignment.name));    
+    newCards.forEach(assignment => {
+      console.log(assignment.name);
+      createCard(listId, encodeURIComponent(assignment.name), assignment.dueDate, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN);
     });
   };
 
