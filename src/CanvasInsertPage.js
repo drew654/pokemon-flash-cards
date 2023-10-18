@@ -43,22 +43,6 @@ const CanvasInsertPage = () => {
       .catch(error => console.error(error));
   };
 
-  const deleteAllCardsInList = (listId, key, token) => {
-    const url = `https://api.trello.com/1/lists/${listId}/cards?key=${key}&token=${token}`;
-    fetch(url, { method: 'GET' })
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(card => {
-          const deleteUrl = `https://api.trello.com/1/cards/${card.id}?key=${key}&token=${token}`;
-          fetch(deleteUrl, { method: 'DELETE' })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        });
-      })
-      .catch(error => console.error(error));
-  };
-
   const importToTrello = () => {
     setSuccessfulCardAdds([]);
     const newCards = assignments.filter(assignment => !trelloAssignments.includes(assignment.name));    
@@ -102,7 +86,6 @@ const CanvasInsertPage = () => {
       </table>
 
       <button type="button" onClick={() => importToTrello()}>Send to {courseName}</button>     
-      <button type="button" onClick={() => deleteAllCardsInList(listId, config.TRELLO_API_KEY, config.TRELLO_API_TOKEN)}>Delete all cards in {courseName}</button>
       </div>
   );
 };
