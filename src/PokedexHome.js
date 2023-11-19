@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { parseName } from './PokedexFunctions';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 
@@ -22,7 +23,7 @@ const PokedexHome = () => {
       <ol>
         {pokemons.map(pokemon => (
           <li key={pokemon.name}>
-            <Link to={`/pokedex/${pokemon.number}`}>{pokemon.name}</Link>
+            <Link to={`/pokedex/${pokemon.number}`}>{parseName(pokemon.name)}</Link>
           </li>
         ))}
       </ol>
