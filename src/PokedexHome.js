@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PokemonCard from './PokemonCard';
 import { Link } from 'react-router-dom';
 import { parseName } from './PokedexFunctions';
 const Pokedex = require('pokeapi-js-wrapper');
@@ -9,24 +10,24 @@ const PokedexHome = () => {
 
   useEffect(() => {
     P.getPokemonsList({ limit: 1017, offset: 0 }).then(response => {
-      const pokemonData = response.results.map(pokemon => {
+      const pokemonData = response.results.map(async pokemon => {
         const number = pokemon.url.split('/')[6];
-        return { name: pokemon.name, number };
+        const pokemonInfo = await P.getPokemonByName(number);
+        const types = pokemonInfo.types.map(type => type.type.name);
+        return { name: pokemon.name, number, types };
       });
-      setPokemons(pokemonData);
+      Promise.all(pokemonData).then(data => {
+        setPokemons(data);
+      });
     });
   }, []);
 
   return (
     <div>
       <h1>Pokedex</h1>
-      <ol>
-        {pokemons.map(pokemon => (
-          <li key={pokemon.name}>
-            <Link to={`/pokedex/${pokemon.number}`}>{parseName(pokemon.name)}</Link>
-          </li>
-        ))}
-      </ol>
+      <ul>
+        {pokemons.map(pokemon => <PokemonCard pokemon={pokemon} />)}
+      </ul>
     </div>
   );
 }
