@@ -29,10 +29,12 @@ const PokedexHome = () => {
 
   return (
     <div>
-      <h1>Pokedex</h1>
-      <ul>
-        {pokemons.map((pokemon, index) => pokemon ? <PokemonCard key={index} pokemon={pokemon} /> : <PokemonCard key={index} pokemon={{number: index + 1}} />)}
-      </ul>
+      <h1 style={{ position: 'fixed', top: 0, left: 0, backgroundColor: 'white', padding: '10px', marginTop: '0px', zIndex: 999 }}>Pokédex</h1>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <ul>
+          {pokemons.map((pokemon, index) => pokemon ? <PokemonCard key={index} pokemon={pokemon} /> : <PokemonCard key={index} pokemon={{number: index + 1}} />)}
+        </ul>
+      </div>
     </div>
   );
 }
