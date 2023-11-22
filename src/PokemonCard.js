@@ -3,7 +3,7 @@ import { parseName } from './PokedexFunctions';
 
 const PokemonCard = ({ pokemon }) => {
   return (
-    <Link to={`/pokedex/${pokemon.number}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/pokedex/${pokemon.number}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div style={{ display: 'flex', borderStyle: 'solid', width: '500px', height: '150px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, padding: '10px' }}>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
