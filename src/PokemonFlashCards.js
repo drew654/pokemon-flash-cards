@@ -136,6 +136,27 @@ const PokemonFlashCards = () => {
               </td>
             </tr>
           </table>
+          {gameState === 'all types selected' && (
+            <div>
+              <div
+                onClick={() => {
+                  setGameState('showing pokemon');
+                  getRandomPokemon().then((pokemon) => setCurrentPokemon(pokemon));
+                  setTypeSelection([]);
+                }}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '1.4em',
+                  width: '2.5em',
+                  fontSize: '1em',
+                  cursor: 'pointer',
+                  border: '1px solid black',
+                }}
+                >Next</div>
+            </div>
+          )}
         </div>
       )}
     </div>
