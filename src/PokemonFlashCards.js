@@ -11,26 +11,53 @@ const PokemonFlashCards = () => {
   const [typeSelection, setTypeSelection] = useState([]);
 
   const TypeButton = (type) => (
-    <div
-      key={type.id}
-      style={{
-        textAlign: 'center',
-        border: 'solid',
-        padding: '0.1em',
-        margin: '0.1em',
-        cursor: 'pointer',
-        backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'green' : 'gray') : 'white',
-        userSelect: 'none',
-      }}
-      onClick={() => {
-        if (!typeSelection.includes(type.name)) {
-          setTypeSelection([...typeSelection, type.name]);
-        }
-      }}
-    >
-      {type.name}
+    <div>
+      {gameState === 'showing pokemon' && (
+        <div
+          key={type.id}
+          style={{
+            textAlign: 'center',
+            border: 'solid',
+            padding: '0.1em',
+            margin: '0.1em',
+            cursor: 'pointer',
+            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'white',
+            userSelect: 'none',
+          }}
+          onClick={() => {
+            if (!typeSelection.includes(type.name)) {
+              const newTypeSelection = [...typeSelection, type.name];
+              setTypeSelection(newTypeSelection);
+              CheckWinCondition(newTypeSelection);
+            }
+          }}
+        >
+          {type.name}
+        </div>
+      )}
+      {gameState === 'all types selected' && (
+        <div
+          key={type.id}
+          style={{
+            textAlign: 'center',
+            border: 'solid',
+            padding: '0.1em',
+            margin: '0.1em',
+            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'lightgray',
+            userSelect: 'none',
+          }}
+        >
+          {type.name}
+        </div>
+      )}
     </div>
   );
+
+  const CheckWinCondition = (newTypeSelection) => {
+    if (currentPokemon?.types.every((type) => newTypeSelection.includes(type))) {
+      setGameState('all types selected');
+    }
+  }
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -84,7 +111,7 @@ const PokemonFlashCards = () => {
           }}
         >Start</div>
       )}
-      {gameState === 'showing pokemon' && (
+      {(gameState === 'showing pokemon' || gameState === 'all types selected') && (
         <div
           style={{
             display: 'flex',
