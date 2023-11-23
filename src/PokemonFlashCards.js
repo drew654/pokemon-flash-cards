@@ -8,6 +8,29 @@ const PokemonFlashCards = () => {
   const [pokemons, setPokemons] = useState([]);
   const [currentPokemon, setCurrentPokemon] = useState(null);
   const [types, setTypes] = useState([]);
+  const [typeSelection, setTypeSelection] = useState([]);
+
+  const TypeButton = (type) => (
+    <div
+      key={type.id}
+      style={{
+        textAlign: 'center',
+        border: 'solid',
+        padding: '0.1em',
+        margin: '0.1em',
+        cursor: 'pointer',
+        backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'green' : 'gray') : 'white',
+        userSelect: 'none',
+      }}
+      onClick={() => {
+        if (!typeSelection.includes(type.name)) {
+          setTypeSelection([...typeSelection, type.name]);
+        }
+      }}
+    >
+      {type.name}
+    </div>
+  );
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -33,8 +56,7 @@ const PokemonFlashCards = () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
     const pokemonName = pokemons[randomIndex];
     const pokemonData = await P.getPokemonByName(pokemonName);
-    const pokemonImage = pokemonData.sprites.front_default;
-    return { name: pokemonName, image: pokemonImage };
+    return { name: pokemonName, image: pokemonData.sprites.front_default, types: pokemonData.types.map((type) => type.type.name) };
   };
 
   return (
@@ -77,19 +99,13 @@ const PokemonFlashCards = () => {
             <table>
             <tr>
               <td>
-                {types.map((type) => (
-                  type.id % 3 === 0 && <div key={type.id} style={{ textAlign: 'center', border: 'solid', padding: '0.1em', margin: '0.1em' }}>{type.name}</div>
-                ))}
+                {types.map((type) => (type.id % 3 === 0 && <TypeButton key={type.id} {...type} />))}
               </td>
               <td>
-                {types.map((type) => (
-                  type.id % 3 === 1 && <div key={type.id} style={{ textAlign: 'center', border: 'solid', padding: '0.1em', margin: '0.1em' }}>{type.name}</div>
-                ))}
+                {types.map((type) => (type.id % 3 === 1 && <TypeButton key={type.id} {...type} />))}
               </td>
               <td>
-                {types.map((type) => (
-                  type.id % 3 === 2 && <div key={type.id} style={{ textAlign: 'center', border: 'solid', padding: '0.1em', margin: '0.1em' }}>{type.name}</div>
-                ))}
+                {types.map((type) => (type.id % 3 === 2 && <TypeButton key={type.id} {...type} />))}
               </td>
             </tr>
           </table>
