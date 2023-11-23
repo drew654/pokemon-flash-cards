@@ -21,14 +21,20 @@ const PokemonInfo = () => {
 
   return (
     <div>
-      <h1>{parseName(pokemon.name)}</h1>
-      <h2>#{pokemonNumber}</h2>
-
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-
-      <h2>{pokemon.types.map(type => (
-        <div key={type.type.name}>{parseName(type.type.name)}</div>
-      ))}</h2>
+      <div style={{ display: 'flex', borderStyle: 'solid', width: '500px', height: '150px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, padding: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <h2 style={{ width: '80px' }}>#{pokemon.id}</h2>
+            <h2>{parseName(pokemon.name)}</h2>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            {pokemon.types.map(type => (
+              <h3 key={type.type.name} style={{ marginRight: '10px' }}>{parseName(type.type.name)}</h3>
+            ))}
+          </div>
+        </div>
+        <img src={pokemon.sprites.front_default} alt={pokemon.name} style={{ height: '100%' }} />
+      </div>
 
       <h2>Abilities</h2>
       {pokemon.abilities.map(ability => (

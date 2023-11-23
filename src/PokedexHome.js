@@ -14,9 +14,14 @@ const PokedexHome = () => {
       const response = await P.getPokemonsList({ limit: pageSize, offset: offset });
       const pokemonData = await Promise.all(response.results.map(async pokemon => {
         const number = pokemon.url.split('/')[6];
-        const pokemonInfo = await P.getPokemonByName(number);
-        const types = pokemonInfo.types.map(type => type.type.name);
-        return { name: pokemon.name, number, types };
+        const pokemonPromise = P.getPokemonByName(number);
+        const speciesPromise = P.getPokemonSpeciesByName(number);
+        return {
+          name: pokemon.name,
+          number,
+          pokemonPromise,
+          speciesPromise,
+        };
       }));
       setPokemons(prev => prev.map((item, index) => pokemonData.find(pokemon => pokemon.number - 1 === index) || item));
       if (offset < pokedexSize) {
