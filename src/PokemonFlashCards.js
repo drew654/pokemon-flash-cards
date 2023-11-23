@@ -48,7 +48,7 @@ const PokemonFlashCards = () => {
             userSelect: 'none',
           }}
         >
-          {type.name}
+          {parseName(type.name)}
         </div>
       )}
     </div>
