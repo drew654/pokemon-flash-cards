@@ -24,8 +24,8 @@ const PokedexHome = () => {
         };
       }));
       setPokemons(prev => prev.map((item, index) => pokemonData.find(pokemon => pokemon.number - 1 === index) || item));
-      if (offset < pokedexSize) {
-        setOffset(offset + pageSize);
+      if (offset < pokedexSize - pageSize) {
+        setOffset(prev => Math.min(prev + pageSize, pokedexSize - pageSize));
       }
     };
   
