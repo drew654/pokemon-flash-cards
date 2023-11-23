@@ -8,6 +8,7 @@ const Home = () => {
         <ul>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
+          <li><Link to="/pokemon-flash-cards">Pokémon Flash Cards</Link></li>
         </ul>
       </nav>
 
