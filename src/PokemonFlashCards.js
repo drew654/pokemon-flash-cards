@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { parseName } from './PokemonFunctions';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 
@@ -32,7 +33,7 @@ const PokemonFlashCards = () => {
             }
           }}
         >
-          {type.name}
+          {parseName(type.name)}
         </div>
       )}
       {gameState === 'all types selected' && (
@@ -121,7 +122,7 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
-          <h1>{(currentPokemon?.name)}</h1>
+          <h1>{parseName(currentPokemon?.name)}</h1>
             <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '6em', height: '6em' }} />
             <table>
             <tr>
@@ -154,7 +155,9 @@ const PokemonFlashCards = () => {
                   cursor: 'pointer',
                   border: '1px solid black',
                 }}
-                >Next</div>
+              >
+                Next
+              </div>
             </div>
           )}
         </div>
