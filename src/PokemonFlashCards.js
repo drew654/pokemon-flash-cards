@@ -11,6 +11,13 @@ const PokemonFlashCards = () => {
   const [types, setTypes] = useState([]);
   const [typeSelection, setTypeSelection] = useState([]);
 
+  const darkMode = false;
+  const secondaryColor = darkMode ? 'white' : 'black';
+  const primaryColor = darkMode ? 'black' : 'white';
+  const successColor = darkMode ? 'green' : 'lightgreen';
+  const failureColor = darkMode ? 'red' : 'tomato';
+  const deslectedColor = darkMode ? 'gray' : 'lightgray';
+
   const TypeButton = (type) => (
     <div>
       {gameState === 'showing pokemon' && (
@@ -22,7 +29,8 @@ const PokemonFlashCards = () => {
             padding: '0.1em',
             margin: '0.1em',
             cursor: 'pointer',
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'white',
+            color: secondaryColor,
+            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
             userSelect: 'none',
           }}
           onClick={() => {
@@ -44,7 +52,7 @@ const PokemonFlashCards = () => {
             border: 'solid',
             padding: '0.1em',
             margin: '0.1em',
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'lightgray',
+            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : deslectedColor,
             userSelect: 'none',
           }}
         >
@@ -93,6 +101,8 @@ const PokemonFlashCards = () => {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
+      backgroundColor: primaryColor,
+      color: secondaryColor,
     }}>
       {gameState === 'waiting to start' && (
         <div
@@ -108,7 +118,7 @@ const PokemonFlashCards = () => {
             width: '12em',
             fontSize: '2rem',
             cursor: 'pointer',
-            border: '1px solid black',
+            border: '1px solid ' + secondaryColor,
           }}
         >Start</div>
       )}
@@ -122,7 +132,14 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
-          <h1>{parseName(currentPokemon?.name)}</h1>
+          <h1
+            style={{
+              marginTop: '0em',
+              marginBottom: '0em',
+            }}
+          >
+            {parseName(currentPokemon?.name)}
+          </h1>
             <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '6em', height: '6em' }} />
             <table>
             <tr>
@@ -153,7 +170,8 @@ const PokemonFlashCards = () => {
                   width: '2.5em',
                   fontSize: '1em',
                   cursor: 'pointer',
-                  border: '1px solid black',
+                  backgroundColor: primaryColor,
+                  border: '1px solid ' + secondaryColor,
                 }}
               >
                 Next
