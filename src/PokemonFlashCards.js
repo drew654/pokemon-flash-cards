@@ -11,7 +11,8 @@ const PokemonFlashCards = () => {
   const [currentPokemon, setCurrentPokemon] = useState(null);
   const [typeSelection, setTypeSelection] = useState([]);
 
-  const darkMode = false;
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const darkMode = prefersDarkMode ? true : false;
   const secondaryColor = darkMode ? 'white' : 'black';
   const primaryColor = darkMode ? 'black' : 'white';
   const successColor = 'green';
