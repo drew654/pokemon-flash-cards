@@ -38,7 +38,6 @@ const PokemonFlashCards = () => {
             backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
             borderRadius: '0.5em',
             borderWidth: '0.2em',
-            userSelect: 'none',
           }}
           onClick={() => {
             if (!typeSelection.includes(type.name)) {
@@ -67,7 +66,6 @@ const PokemonFlashCards = () => {
             backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
             borderRadius: '0.5em',
             borderWidth: '0.2em',
-            userSelect: 'none',
           }}
         >
           {parseName(type.name)}
@@ -99,6 +97,16 @@ const PokemonFlashCards = () => {
     return { name: pokemonName, image: pokemonData.sprites.front_default, types: pokemonData.types.map((type) => type.type.name) };
   };
 
+  const getRandomPokemonWithImage = async () => {
+    const pokemon = await getRandomPokemon();
+    if (!pokemon.image) {
+      return getRandomPokemonWithImage();
+    }
+    else {
+      return pokemon;
+    }
+  }
+
   return (
     <div style={{
       display: gameState === 'waiting to start' ? 'flex' : '',
@@ -107,12 +115,13 @@ const PokemonFlashCards = () => {
       height: '100vh',
       backgroundColor: primaryColor,
       color: secondaryColor,
+      userSelect: 'none',
     }}>
       {gameState === 'waiting to start' && (
         <div
           onClick={() => {
             setGameState('showing pokemon');
-            getRandomPokemon().then((pokemon) => setCurrentPokemon(pokemon));
+            getRandomPokemonWithImage().then((pokemon) => setCurrentPokemon(pokemon));
           }}
           style={{
             display: 'flex',
