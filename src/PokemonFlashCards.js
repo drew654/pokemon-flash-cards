@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { parseName } from './PokemonFunctions';
+import { types } from './PokeAPIAdapter.js';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 
@@ -8,8 +9,15 @@ const PokemonFlashCards = () => {
   const [gameState, setGameState] = useState('waiting to start');
   const [pokemons, setPokemons] = useState([]);
   const [currentPokemon, setCurrentPokemon] = useState(null);
-  const [types, setTypes] = useState([]);
   const [typeSelection, setTypeSelection] = useState([]);
+
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const darkMode = prefersDarkMode ? true : false;
+  const secondaryColor = darkMode ? 'white' : 'black';
+  const primaryColor = darkMode ? 'black' : 'white';
+  const successColor = 'green';
+  const failureColor = 'red';
+  const deslectedColor = 'gray';
 
   const TypeButton = (type) => (
     <div>
@@ -22,7 +30,14 @@ const PokemonFlashCards = () => {
             padding: '0.1em',
             margin: '0.1em',
             cursor: 'pointer',
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'white',
+            width: '4em',
+            maxWidth: '25vw',
+            fontSize: '0.75em',
+            color: 'white',
+            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
+            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
+            borderRadius: '0.5em',
+            borderWidth: '0.2em',
             userSelect: 'none',
           }}
           onClick={() => {
@@ -44,7 +59,14 @@ const PokemonFlashCards = () => {
             border: 'solid',
             padding: '0.1em',
             margin: '0.1em',
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? 'lightgreen' : 'tomato') : 'lightgray',
+            width: '4em',
+            maxWidth: '25vw',
+            fontSize: '0.75em',
+            color: 'white',
+            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
+            backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
+            borderRadius: '0.5em',
+            borderWidth: '0.2em',
             userSelect: 'none',
           }}
         >
@@ -70,16 +92,6 @@ const PokemonFlashCards = () => {
     fetchPokemons();
   }, []);
 
-  useEffect(() => {
-    const fetchTypes = async () => {
-      const response = await P.getTypesList();
-      const types = response.results.map((type) => ({ name: type.name, id: type.url.split('/')[6] })).filter((type) => type.id < 10000);
-      setTypes(types);
-    };
-
-    fetchTypes();
-  }, []);
-
   const getRandomPokemon = async () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
     const pokemonName = pokemons[randomIndex];
@@ -89,10 +101,12 @@ const PokemonFlashCards = () => {
 
   return (
     <div style={{
-      display: 'flex',
+      display: gameState === 'waiting to start' ? 'flex' : '',
+      alignItems: gameState === 'waiting to start' ? 'center' : '',
       justifyContent: 'center',
-      alignItems: 'center',
       height: '100vh',
+      backgroundColor: primaryColor,
+      color: secondaryColor,
     }}>
       {gameState === 'waiting to start' && (
         <div
@@ -105,10 +119,11 @@ const PokemonFlashCards = () => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '4em',
-            width: '12em',
+            width: '10em',
             fontSize: '2rem',
             cursor: 'pointer',
-            border: '1px solid black',
+            borderRadius: '0.5em',
+            border: '2px solid ' + secondaryColor,
           }}
         >Start</div>
       )}
@@ -122,18 +137,25 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
-          <h1>{parseName(currentPokemon?.name)}</h1>
-            <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '6em', height: '6em' }} />
+          <h1
+            style={{
+              marginBottom: '0em',
+              fontSize: '2rem',
+            }}
+          >
+            {parseName(currentPokemon?.name)}
+          </h1>
+            <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
             <table>
             <tr>
-              <td>
-                {types.map((type) => (type.id % 3 === 0 && <TypeButton key={type.id} {...type} />))}
-              </td>
               <td>
                 {types.map((type) => (type.id % 3 === 1 && <TypeButton key={type.id} {...type} />))}
               </td>
               <td>
                 {types.map((type) => (type.id % 3 === 2 && <TypeButton key={type.id} {...type} />))}
+              </td>
+              <td>
+                {types.map((type) => (type.id % 3 === 0 && <TypeButton key={type.id} {...type} />))}
               </td>
             </tr>
           </table>
@@ -146,6 +168,8 @@ const PokemonFlashCards = () => {
                   setTypeSelection([]);
                 }}
                 style={{
+                  marginTop: '0.5em',
+                  padding: '0.1em',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -153,7 +177,9 @@ const PokemonFlashCards = () => {
                   width: '2.5em',
                   fontSize: '1em',
                   cursor: 'pointer',
-                  border: '1px solid black',
+                  backgroundColor: primaryColor,
+                  borderRadius: '0.5em',
+                  border: '2px solid ' + secondaryColor,
                 }}
               >
                 Next
