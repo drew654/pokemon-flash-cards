@@ -9,6 +9,11 @@ export const parseName = name => {
       printName += 'Mega ';
     }
 
+    // Primal
+    if (parsedName.primal) {
+      printName += 'Primal ';
+    }
+
     // Rest of name
     printName += name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
@@ -33,6 +38,12 @@ export const parseName = name => {
       parsedName.mega = 'Mega';
       name = name.replace('-mega', '');
     }
+  }
+
+  // Primal
+  if (name.includes('primal')) {
+    parsedName.primal = true;
+    name = name.replace('-primal', '');
   }
   
   return parsedName.print();
