@@ -3,6 +3,7 @@ export const parseName = name => {
 
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
+  const formes = ['deoxys'];
 
   parsedName.print = () => {
     let printName = '';
@@ -24,6 +25,11 @@ export const parseName = name => {
     }
     else {
       printName += baseName;
+    }
+
+    // Forme
+    if (parsedName.forme) {
+      printName += ' (' + parsedName.forme.charAt(0).toUpperCase() + parsedName.forme.slice(1) + ' Forme)';
     }
 
     // Mega X/Y
@@ -54,10 +60,17 @@ export const parseName = name => {
     parsedName.hyphenated = name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
   }
   // Hyphenated with lowercase second word
-  if (otherHyphenatedNames.includes(name)) {
+  if (otherHyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
     parsedName.hyphenated = name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
     const index = parsedName.hyphenated.lastIndexOf('-');
     parsedName.hyphenated = parsedName.hyphenated.substring(0, index) + '-' + parsedName.hyphenated.substring(index + 1, index + 2).toLowerCase();
+  }
+
+  // Formes
+  if (formes.some(forme => name.includes(forme))) {
+    const splitName = parsedName.forme = name.split('-');
+    parsedName.forme = splitName[splitName.length - 1];
+    name = name.replace('-' + parsedName.forme, '');
   }
     
   // Mega (X/Y)
