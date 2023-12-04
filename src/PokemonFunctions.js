@@ -24,6 +24,22 @@ export const parseName = name => {
     return printName;
   }
 
+  // Special cases
+  if (name.includes('nidoran')) {
+    if (name[name.length - 1] === 'm') {
+      name = 'nidoran♂';
+    }
+    else {
+      name = 'nidoran♀';
+    }
+  }
+  if (name.includes('mr')) {
+    name = name.replace('mr', 'mr.');
+  }
+  if (name.includes('jr')) {
+    name = name.replace('jr', 'jr.');
+  }
+    
   // Mega (X/Y)
   if (name.includes('mega')) {
     if (name.includes('mega-x')) {
