@@ -1,9 +1,10 @@
 export const parseName = name => {
   const parsedName = {};
 
-  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu'];
+  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
-  const formes = ['deoxys'];
+  const formes = ['deoxys', 'giratina', 'shaymin'];
+  const forms = ['basculin'];
 
   parsedName.print = () => {
     let printName = '';
@@ -27,9 +28,14 @@ export const parseName = name => {
       printName += baseName;
     }
 
-    // Forme
-    if (parsedName.forme) {
-      printName += ' (' + parsedName.forme.charAt(0).toUpperCase() + parsedName.forme.slice(1) + ' Forme)';
+    // Form
+    if (parsedName.form) {
+      if (parsedName.formWithAnE) {
+        printName += ' (' + parsedName.form + ' Forme)';
+      }
+      else {
+        printName += ' (' + parsedName.form + ' Form)';
+      }
     }
 
     // Cloak
@@ -74,13 +80,6 @@ export const parseName = name => {
     const index = parsedName.hyphenated.lastIndexOf('-');
     parsedName.hyphenated = parsedName.hyphenated.substring(0, index) + '-' + parsedName.hyphenated.substring(index + 1, index + 2).toLowerCase();
   }
-
-  // Formes
-  if (formes.some(forme => name.includes(forme))) {
-    const splitName = parsedName.forme = name.split('-');
-    parsedName.forme = splitName[splitName.length - 1];
-    name = name.replace('-' + parsedName.forme, '');
-  }
     
   // Mega (X/Y)
   if (name.includes('-mega')) {
@@ -102,6 +101,24 @@ export const parseName = name => {
   if (name.includes('primal')) {
     parsedName.primal = true;
     name = name.replace('-primal', '');
+  }
+
+  // Formes
+  if (formes.some(forme => name.includes(forme))) {
+    parsedName.formWithAnE = true;
+  }
+
+  // Forms
+  if (forms.concat(formes).some(form => name.includes(form))) {
+    const splitName = parsedName.form = name.split('-');
+    name = splitName[0];
+    const form = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
+    if (hyphenatedNames.some(hyphenatedName => form.includes(hyphenatedName))) {
+      parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
+    }
+    else {
+      parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
   }
   
   return parsedName.print();
