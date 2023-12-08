@@ -3,7 +3,7 @@ export const parseName = name => {
 
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
-  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash'];
+  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde'];
   const forms = ['basculin', 'keldeo'];
 
   parsedName.print = () => {
@@ -60,6 +60,11 @@ export const parseName = name => {
     if (parsedName.size) {
       printName += ' (' + parsedName.size.charAt(0).toUpperCase() + parsedName.size.slice(1) + ' Size)';
     }
+
+    // Style
+    if (parsedName.style) {
+      printName += ' (' + parsedName.style + ' Style)';
+    }
     return printName;
   }
 
@@ -84,6 +89,9 @@ export const parseName = name => {
   }
   if (name.includes('flabebe')) {
     name = name.replace('flabebe', 'flabébé');
+  }
+  if (name.includes('zygarde')) {
+    name = name.replace('0', '0%');
   }
 
   // Hyphenated name
@@ -155,6 +163,23 @@ export const parseName = name => {
   if (name.includes('gourgeist')) {
     parsedName.size = name.split('-')[1];
     name = 'gourgeist';
+  }
+
+  // Style
+  if (name.includes('oricorio')) {
+    const splitName = name.split('-');
+    name = splitName[0];
+    const form = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
+    console.log(form);
+    if (form === 'pau') {
+      parsedName.style = 'Pa\'u';
+    }
+    else if (form === 'pom-pom') {
+      parsedName.style = 'Pom-Pom';
+    }
+    else {
+      parsedName.style = form.charAt(0).toUpperCase() + form.slice(1);
+    }
   }
   
   return parsedName.print();
