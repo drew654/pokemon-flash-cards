@@ -4,7 +4,8 @@ export const parseName = name => {
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde'];
-  const forms = ['basculin', 'keldeo'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity'];
+  const modes = ['morpeko'];
 
   parsedName.print = () => {
     let printName = '';
@@ -65,6 +66,17 @@ export const parseName = name => {
     if (parsedName.style) {
       printName += ' (' + parsedName.style + ' Style)';
     }
+
+    // Face
+    if (parsedName.face) {
+      printName += ' (' + parsedName.face.charAt(0).toUpperCase() + parsedName.face.slice(1) + ' Face)';
+    }
+
+    // Mode
+    if (parsedName.mode) {
+      printName += ' (' + parsedName.mode.charAt(0).toUpperCase() + parsedName.mode.slice(1) + ' Mode)';
+    }
+
     return printName;
   }
 
@@ -92,6 +104,9 @@ export const parseName = name => {
   }
   if (name.includes('zygarde')) {
     name = name.replace('0', '0%');
+  }
+  if (name.includes('type-null')) {
+    name = name.replace('type-null', 'type:-null');
   }
 
   // Hyphenated name
@@ -170,7 +185,6 @@ export const parseName = name => {
     const splitName = name.split('-');
     name = splitName[0];
     const form = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
-    console.log(form);
     if (form === 'pau') {
       parsedName.style = 'Pa\'u';
     }
@@ -180,6 +194,19 @@ export const parseName = name => {
     else {
       parsedName.style = form.charAt(0).toUpperCase() + form.slice(1);
     }
+  }
+
+  // Face
+  if (name.includes('eiscue')) {
+    parsedName.face = name.split('-')[1];
+    name = 'eiscue';
+  }
+
+  // Mode
+  if (modes.some(mode => name.includes(mode))) {
+    const splitName = name.split('-');
+    name = name.split('-')[0];
+    parsedName.mode = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
   
   return parsedName.print();
