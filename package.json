@@ -1,7 +1,7 @@
 {
-  "name": "drew654.github.io",
+  "name": "pokemon-flash-cards",
   "version": "0.1.0",
-  "homepage": "https://drew654.github.io/",
+  "homepage": "https://drew654.github.io/pokemon-flash-cards/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
