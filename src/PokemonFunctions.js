@@ -32,6 +32,11 @@ export const parseName = name => {
       printName += ' (' + parsedName.forme.charAt(0).toUpperCase() + parsedName.forme.slice(1) + ' Forme)';
     }
 
+    // Cloak
+    if (parsedName.cloak) {
+      printName += ' (' + parsedName.cloak.charAt(0).toUpperCase() + parsedName.cloak.slice(1) + ' Cloak)';
+    }
+
     // Mega X/Y
     if (parsedName?.mega?.length === 6) {
       printName += ' ' + parsedName.mega.charAt(5);
@@ -54,6 +59,10 @@ export const parseName = name => {
   if (name.includes('jr')) {
     name = name.replace('jr', 'jr.');
   }
+  if (name.includes('wormadam')) {
+    parsedName.cloak = name.split('-')[1];
+    name = 'wormadam';
+  }
 
   // Hyphenated name
   if (hyphenatedNames.includes(name)) {
@@ -74,12 +83,12 @@ export const parseName = name => {
   }
     
   // Mega (X/Y)
-  if (name.includes('mega')) {
-    if (name.includes('mega-x')) {
+  if (name.includes('-mega')) {
+    if (name.includes('-mega-x')) {
       parsedName.mega = 'Mega X';
       name = name.replace('-mega-x', '');
     }
-    else if (name.includes('mega-y')) {
+    else if (name.includes('-mega-y')) {
       parsedName.mega = 'Mega Y';
       name = name.replace('-mega-y', '');
     }
