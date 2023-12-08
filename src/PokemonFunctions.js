@@ -3,7 +3,7 @@ export const parseName = name => {
 
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
-  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde'];
+  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
   const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['morpeko'];
@@ -59,23 +59,28 @@ export const parseName = name => {
     }
 
     // Size
-    if (parsedName.size) {
+    if (parsedName?.size) {
       printName += ' (' + parsedName.size.charAt(0).toUpperCase() + parsedName.size.slice(1) + ' Size)';
     }
 
     // Style
-    if (parsedName.style) {
+    if (parsedName?.style) {
       printName += ' (' + parsedName.style + ' Style)';
     }
 
     // Face
-    if (parsedName.face) {
+    if (parsedName?.face) {
       printName += ' (' + parsedName.face.charAt(0).toUpperCase() + parsedName.face.slice(1) + ' Face)';
     }
 
     // Mode
-    if (parsedName.mode) {
+    if (parsedName?.mode) {
       printName += ' (' + parsedName.mode.charAt(0).toUpperCase() + parsedName.mode.slice(1) + ' Mode)';
+    }
+
+    // Rotom
+    if (parsedName?.rotom) {
+      printName = parsedName.rotom + ' ' + printName;
     }
 
     return printName;
@@ -215,6 +220,13 @@ export const parseName = name => {
     const splitName = name.split('-');
     name = name.split('-')[0];
     parsedName.mode = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  // Rotom
+  if (name.includes('rotom')) {
+    const splitName = name.split('-');
+    name = splitName[0];
+    parsedName.rotom = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
   
   return parsedName.print();
