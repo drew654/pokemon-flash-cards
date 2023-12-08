@@ -55,6 +55,11 @@ export const parseName = name => {
     else if (parsedName?.female) {
       printName += ' (Female)';
     }
+
+    // Size
+    if (parsedName.size) {
+      printName += ' (' + parsedName.size.charAt(0).toUpperCase() + parsedName.size.slice(1) + ' Size)';
+    }
     return printName;
   }
 
@@ -140,6 +145,16 @@ export const parseName = name => {
   if (name.includes('-female')) {
     parsedName.female = true;
     name = name.replace('-female', '');
+  }
+
+  // Size
+  if (name.includes('pumpkaboo')) {
+    parsedName.size = name.split('-')[1];
+    name = 'pumpkaboo';
+  }
+  if (name.includes('gourgeist')) {
+    parsedName.size = name.split('-')[1];
+    name = 'gourgeist';
   }
   
   return parsedName.print();
