@@ -3,9 +3,11 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PokemonFlashCards from './PokemonFlashCards';
 
+const basename = process.env.PUBLIC_URL || '/pokemon-flash-cards';
+
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<PokemonFlashCards />} />
       </Routes>
