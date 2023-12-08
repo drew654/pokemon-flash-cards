@@ -3,8 +3,8 @@ export const parseName = name => {
 
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
-  const formes = ['deoxys', 'giratina', 'shaymin'];
-  const forms = ['basculin'];
+  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash'];
+  const forms = ['basculin', 'keldeo'];
 
   parsedName.print = () => {
     let printName = '';
@@ -47,6 +47,14 @@ export const parseName = name => {
     if (parsedName?.mega?.length === 6) {
       printName += ' ' + parsedName.mega.charAt(5);
     }
+
+    // Gender
+    if (parsedName?.male) {
+      printName += ' (Male)';
+    }
+    else if (parsedName?.female) {
+      printName += ' (Female)';
+    }
     return printName;
   }
 
@@ -68,6 +76,9 @@ export const parseName = name => {
   if (name.includes('wormadam')) {
     parsedName.cloak = name.split('-')[1];
     name = 'wormadam';
+  }
+  if (name.includes('flabebe')) {
+    name = name.replace('flabebe', 'flabébé');
   }
 
   // Hyphenated name
@@ -119,6 +130,16 @@ export const parseName = name => {
     else {
       parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
+  }
+
+  // Gender
+  if (name.includes('-male')) {
+    parsedName.male = true;
+    name = name.replace('-male', '');
+  }
+  if (name.includes('-female')) {
+    parsedName.female = true;
+    name = name.replace('-female', '');
   }
   
   return parsedName.print();
