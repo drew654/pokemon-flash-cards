@@ -5,6 +5,7 @@ export const parseName = name => {
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde'];
   const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity'];
+  const styles = ['oricorio', 'urshifu'];
   const modes = ['morpeko'];
 
   parsedName.print = () => {
@@ -110,7 +111,7 @@ export const parseName = name => {
   }
 
   // Hyphenated name
-  if (hyphenatedNames.includes(name)) {
+  if (hyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
     parsedName.hyphenated = name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
   }
   // Hyphenated with lowercase second word
@@ -181,18 +182,25 @@ export const parseName = name => {
   }
 
   // Style
-  if (name.includes('oricorio')) {
+  if (styles.some(style => name.includes(style))) {
     const splitName = name.split('-');
     name = splitName[0];
-    const form = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
-    if (form === 'pau') {
-      parsedName.style = 'Pa\'u';
+    const style = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
+    parsedName.style = style;
+
+    if (name === 'oricorio') {
+      if (style === 'pau') {
+        parsedName.style = 'Pa\'u';
+      }
+      else if (style === 'pom-pom') {
+        parsedName.style = 'Pom-Pom';
+      }
+      else {
+        parsedName.style = style.charAt(0).toUpperCase() + style.slice(1);
+      }
     }
-    else if (form === 'pom-pom') {
-      parsedName.style = 'Pom-Pom';
-    }
-    else {
-      parsedName.style = form.charAt(0).toUpperCase() + form.slice(1);
+    else if (name === 'urshifu') {
+      parsedName.style = style.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
   }
 
