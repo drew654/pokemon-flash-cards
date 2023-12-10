@@ -3,14 +3,19 @@
   "name": "Pokémon Flash Cards",
   "icons": [
     {
-      "src": "258.ico",
-      "sizes": "96x96",
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "258.png",
+      "src": "logo192.png",
       "type": "image/png",
-      "sizes": "96x96"
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",
