@@ -5,12 +5,12 @@ export const parseName = name => {
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja', 'three-segment'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus', 'dialga', 'palkia'];
-  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant', 'dudunsparce', 'palafin'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant', 'dudunsparce', 'palafin', 'tatsugiri', 'gimmighoul'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
   const abilities = ['battle-bond', 'own-tempo'];
-  const otherForms = ['dada', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four'];
+  const otherForms = ['dada', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'bloodmoon', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
 
   const simpleParse = (string) => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -235,6 +235,12 @@ export const parseName = name => {
     else {
       name = 'Maushold (Family of Three)';
     }
+  }
+  if (name === 'tatsugiri') {
+    name += '-curly';
+  }
+  if (name === 'squawkabilly') {
+    name += '-green-plumage';
   }
 
   // Region
