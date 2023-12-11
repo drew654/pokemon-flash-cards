@@ -4,7 +4,7 @@ export const parseName = name => {
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
-  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
@@ -170,6 +170,30 @@ export const parseName = name => {
       name = 'ultra-necrozma';
     }
   }
+  if (name.includes('-starter')) {
+    name = name.replace('-starter', '-(Starter)');
+  }
+  if (name.includes('zacian') || name.includes('zamazenta')) {
+    if (name.includes('-crowned')) {
+      name = name.replace('-crowned', ' (Crowned Sword)');
+    }
+    else {
+      name = name + ' (Hero of Many Battles)';
+    }
+  }
+  if (name.includes('eternatus-eternamax')) {
+    name = name.replace('eternatus-eternamax', 'eternamax-eternatus');
+  }
+
+  // Region
+  if (name.includes('-alola')) {
+    name = name.replace('-alola', '');
+    parsedName.region = 'Alolan';
+  }
+  if (name.includes('-galar')) {
+    name = name.replace('-galar', '');
+    parsedName.region = 'Galarian';
+  }
 
   // Totem
   if (name.includes('-totem')) {
@@ -296,12 +320,6 @@ export const parseName = name => {
     const splitName = name.split('-');
     name = splitName[0];
     parsedName.color = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
-
-  // Region
-  if (name.includes('-alola')) {
-    name = name.replace('-alola', '');
-    parsedName.region = 'Alolan';
   }
   
   return parsedName.print();
