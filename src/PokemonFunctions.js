@@ -2,15 +2,15 @@ export const parseName = name => {
   const parsedName = {};
   const originalName = name;
 
-  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja'];
+  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja', 'three-segment'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus', 'dialga', 'palkia'];
-  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant', 'dudunsparce', 'palafin'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
   const abilities = ['battle-bond', 'own-tempo'];
-  const otherForms = ['dada'];
+  const otherForms = ['dada', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four'];
 
   const simpleParse = (string) => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -132,12 +132,11 @@ export const parseName = name => {
     }
     const foundOtherHyphenatedName = otherHyphenatedNames.find(hyphenatedName => originalName.includes(hyphenatedName));
     if (foundOtherHyphenatedName) {
-      console.log(foundOtherHyphenatedName, printName);
-        printName = printName.replace(' ', '-');
-        printName = printName.replace(/-(.)/g, function(match, p1) {
-          return '-' + p1.toLowerCase();
-        });
-      }
+      printName = printName.replace(' ', '-');
+      printName = printName.replace(/-(.)/g, function(match, p1) {
+        return '-' + p1.toLowerCase();
+      });
+    }
 
     return printName;
   }
@@ -226,19 +225,34 @@ export const parseName = name => {
       name = name.replace('-shadow', ' (Shadow Rider)');
     }
   }
+  if (name === 'palafin') {
+    name = 'palafin-zero';
+  }
+  if (name.includes('maushold')) {
+    if (name === 'maushold') {
+      name = 'Maushold (Family of Four)';
+    }
+    else {
+      name = 'Maushold (Family of Three)';
+    }
+  }
 
   // Region
   if (name.includes('-alola')) {
     name = name.replace('-alola', '');
     parsedName.region = 'Alolan';
   }
-  if (name.includes('-galar')) {
+  else if (name.includes('-galar')) {
     name = name.replace('-galar', '');
     parsedName.region = 'Galarian';
   }
-  if (name.includes('-hisui')) {
+  else if (name.includes('-hisui')) {
     name = name.replace('-hisui', '');
     parsedName.region = 'Hisuian';
+  }
+  else if (name.includes('-paldea')) {
+    name = name.replace('-paldea', '');
+    parsedName.region = 'Paldean';
   }
 
   // Totem
@@ -360,7 +374,7 @@ export const parseName = name => {
   // Other forms
   const foundOtherForm = otherForms.find(form => name.includes(form));
   if (foundOtherForm) {
-    parsedName.otherForm = foundOtherForm.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    parsedName.otherForm = simpleParse(foundOtherForm);
     name = name.replace(foundOtherForm, '');
   }
   
