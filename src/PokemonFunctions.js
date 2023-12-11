@@ -1,14 +1,24 @@
 export const parseName = name => {
   const parsedName = {};
+  const originalName = name;
 
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
-  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
+  const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus', 'dialga', 'palkia'];
   const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
   const abilities = ['battle-bond', 'own-tempo'];
+  const otherForms = ['dada'];
+
+  const simpleParse = (string) => {
+    return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  const hyphenatedParse = (string) => {
+    return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
+  }
 
   parsedName.print = () => {
     let printName = '';
@@ -50,6 +60,11 @@ export const parseName = name => {
     // Mega X/Y
     if (parsedName?.mega?.length === 6) {
       printName += ' ' + parsedName.mega.charAt(5);
+    }
+
+    // Gigantamax
+    if (parsedName.gmax) {
+      printName = 'Gigantamax ' + printName;
     }
 
     // Gender
@@ -104,6 +119,25 @@ export const parseName = name => {
     if (parsedName?.ability) {
       printName += ' (' + parsedName.ability + ')';
     }
+
+    // Other forms
+    if (parsedName?.otherForm) {
+      printName += ' (' + parsedName.otherForm + ')';
+    }
+
+    // Hyphenated
+    const foundHyphenatedName = hyphenatedNames.find(hyphenatedName => originalName.includes(hyphenatedName));
+    if (foundHyphenatedName) {
+      printName = printName.replace(simpleParse(foundHyphenatedName), hyphenatedParse(foundHyphenatedName));
+    }
+    const foundOtherHyphenatedName = otherHyphenatedNames.find(hyphenatedName => originalName.includes(hyphenatedName));
+    if (foundOtherHyphenatedName) {
+      console.log(foundOtherHyphenatedName, printName);
+        printName = printName.replace(' ', '-');
+        printName = printName.replace(/-(.)/g, function(match, p1) {
+          return '-' + p1.toLowerCase();
+        });
+      }
 
     return printName;
   }
@@ -184,6 +218,14 @@ export const parseName = name => {
   if (name.includes('eternatus-eternamax')) {
     name = name.replace('eternatus-eternamax', 'eternamax-eternatus');
   }
+  if (name.includes('calyrex')) {
+    if (name.includes('-ice')) {
+      name = name.replace('-ice', ' (Ice Rider)');
+    }
+    else if (name.includes('-shadow')) {
+      name = name.replace('-shadow', ' (Shadow Rider)');
+    }
+  }
 
   // Region
   if (name.includes('-alola')) {
@@ -194,22 +236,15 @@ export const parseName = name => {
     name = name.replace('-galar', '');
     parsedName.region = 'Galarian';
   }
+  if (name.includes('-hisui')) {
+    name = name.replace('-hisui', '');
+    parsedName.region = 'Hisuian';
+  }
 
   // Totem
   if (name.includes('-totem')) {
     name = name.replace('-totem', '');
     parsedName.totem = true;
-  }
-
-  // Hyphenated name
-  if (hyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
-    parsedName.hyphenated = name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
-  }
-  // Hyphenated with lowercase second word
-  if (otherHyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
-    parsedName.hyphenated = name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
-    const index = parsedName.hyphenated.lastIndexOf('-');
-    parsedName.hyphenated = parsedName.hyphenated.substring(0, index) + '-' + parsedName.hyphenated.substring(index + 1, index + 2).toLowerCase();
   }
     
   // Mega (X/Y)
@@ -234,22 +269,22 @@ export const parseName = name => {
     name = name.replace('-primal', '');
   }
 
+  // Gigantamax
+  if (name.includes('-gmax')) {
+    name = name.replace('-gmax', '');
+    parsedName.gmax = true;
+  }
+
   // Formes
   if (formes.some(forme => name.includes(forme))) {
     parsedName.formWithAnE = true;
   }
 
-  // Forms
+  // Forms 
   if (forms.concat(formes).some(form => name.includes(form))) {
-    const splitName = parsedName.form = name.split('-');
-    name = splitName[0];
-    const form = splitName.filter(word => word !== name).map(word => word.charAt(0) + word.slice(1)).join('-');
-    if (hyphenatedNames.some(hyphenatedName => form.includes(hyphenatedName))) {
-      parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
-    }
-    else {
-      parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
+    const pokemonWithTheForm = forms.concat(formes).find(form => name.includes(form));
+    parsedName.form = name.replace(pokemonWithTheForm + '-', '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    name = pokemonWithTheForm;
   }
 
   // Abilities
@@ -320,6 +355,13 @@ export const parseName = name => {
     const splitName = name.split('-');
     name = splitName[0];
     parsedName.color = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  // Other forms
+  const foundOtherForm = otherForms.find(form => name.includes(form));
+  if (foundOtherForm) {
+    parsedName.otherForm = foundOtherForm.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    name = name.replace(foundOtherForm, '');
   }
   
   return parsedName.print();
