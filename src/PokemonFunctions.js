@@ -1,7 +1,7 @@
 export const parseName = name => {
   const parsedName = {};
 
-  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
+  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
   const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform'];
@@ -89,6 +89,16 @@ export const parseName = name => {
       printName = parsedName.color + ' ' + printName;
     }
 
+    // Region
+    if (parsedName?.region) {
+      printName = parsedName.region + ' ' + printName;
+    }
+
+    // Totem
+    if (parsedName?.totem) {
+      printName += ' (Totem)';
+    }
+
     return printName;
   }
 
@@ -133,6 +143,15 @@ export const parseName = name => {
   }
   if (name.includes('-cosplay')) {
     name = 'cosplay-' + name.replace('-cosplay', '');
+  }
+  if (name.includes('-cap')) {
+    name = name.replace('pikachu-', '') + '-pikachu';
+  }
+  if (name.includes('-battle-bond')) {
+    name = name.replace('battle-bond', '(Battle Bond)');
+  }
+  if (name.includes('-ash')) {
+    name = 'ash-' + name.replace('-ash', '');
   }
 
 
@@ -248,6 +267,18 @@ export const parseName = name => {
     const splitName = name.split('-');
     name = splitName[0];
     parsedName.color = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  // Region
+  if (name.includes('-alola')) {
+    name = name.replace('-alola', '');
+    parsedName.region = 'Alolan';
+  }
+
+  // Totem
+  if (name.includes('-totem')) {
+    name = name.replace('-totem', '');
+    parsedName.totem = true;
   }
   
   return parsedName.print();
