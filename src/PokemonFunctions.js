@@ -4,10 +4,11 @@ export const parseName = name => {
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
-  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi'];
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
+  const abilities = ['battle-bond', 'own-tempo'];
 
   parsedName.print = () => {
     let printName = '';
@@ -99,6 +100,11 @@ export const parseName = name => {
       printName += ' (Totem)';
     }
 
+    // Ability
+    if (parsedName?.ability) {
+      printName += ' (' + parsedName.ability + ')';
+    }
+
     return printName;
   }
 
@@ -147,13 +153,29 @@ export const parseName = name => {
   if (name.includes('-cap')) {
     name = name.replace('pikachu-', '') + '-pikachu';
   }
-  if (name.includes('-battle-bond')) {
-    name = name.replace('battle-bond', '(Battle Bond)');
-  }
   if (name.includes('-ash')) {
     name = 'ash-' + name.replace('-ash', '');
   }
+  if (name.includes('magearna-original')) {
+    name = name.replace('magearna-original', 'magearna-(Original Color)');
+  }
+  if (name.includes('necrozma')) {
+    if (name === 'necrozma-dusk') {
+      name = 'dusk-mane';
+    }
+    else if (name === 'necrozma-dawn') {
+      name = 'dawn-wings';
+    }
+    else if (name === 'necrozma-ultra') {
+      name = 'ultra-necrozma';
+    }
+  }
 
+  // Totem
+  if (name.includes('-totem')) {
+    name = name.replace('-totem', '');
+    parsedName.totem = true;
+  }
 
   // Hyphenated name
   if (hyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
@@ -204,6 +226,13 @@ export const parseName = name => {
     else {
       parsedName.form = form.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
+  }
+
+  // Abilities
+  let foundAbility = abilities.find(ability => name.includes(ability));
+  if (foundAbility) {
+    parsedName.ability = foundAbility.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    name = name.replace(foundAbility, '');
   }
 
   // Gender
@@ -273,12 +302,6 @@ export const parseName = name => {
   if (name.includes('-alola')) {
     name = name.replace('-alola', '');
     parsedName.region = 'Alolan';
-  }
-
-  // Totem
-  if (name.includes('-totem')) {
-    name = name.replace('-totem', '');
-    parsedName.totem = true;
   }
   
   return parsedName.print();
