@@ -4,9 +4,10 @@ export const parseName = name => {
   const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus'];
-  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity'];
+  const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform'];
   const styles = ['oricorio', 'urshifu'];
-  const modes = ['morpeko'];
+  const modes = ['darmanitan', 'morpeko'];
+  const colors = ['kyurem'];
 
   parsedName.print = () => {
     let printName = '';
@@ -83,6 +84,11 @@ export const parseName = name => {
       printName = parsedName.rotom + ' ' + printName;
     }
 
+    // Color
+    if (parsedName?.color) {
+      printName = parsedName.color + ' ' + printName;
+    }
+
     return printName;
   }
 
@@ -114,6 +120,21 @@ export const parseName = name => {
   if (name.includes('type-null')) {
     name = name.replace('type-null', 'type:-null');
   }
+  if (name.includes('rotom')) {
+    const splitName = name.split('-');
+    name = splitName[0];
+    parsedName.rotom = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+  if (name.includes('floette-eternal')) {
+    name = name.replace('floette-eternal', 'floette-(Eternal-flower)');
+  }
+  if (name.includes('-phd')) {
+    name = name.replace('-phd', ', Ph.D');
+  }
+  if (name.includes('-cosplay')) {
+    name = 'cosplay-' + name.replace('-cosplay', '');
+  }
+
 
   // Hyphenated name
   if (hyphenatedNames.some(hyphenatedName => name.includes(hyphenatedName))) {
@@ -222,11 +243,11 @@ export const parseName = name => {
     parsedName.mode = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
-  // Rotom
-  if (name.includes('rotom')) {
+  // Color
+  if (colors.some(color => name.includes(color))) {
     const splitName = name.split('-');
     name = splitName[0];
-    parsedName.rotom = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    parsedName.color = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
   
   return parsedName.print();
