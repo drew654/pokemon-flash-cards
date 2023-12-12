@@ -2,7 +2,7 @@ export const parseName = name => {
   const parsedName = {};
   const originalName = name;
 
-  const hyphenatedNames = ['ho-oh', 'porygon-z', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja', 'three-segment'];
+  const hyphenatedNames = ['ho-oh', 'porygon-z', 'greninja-ash', 'wo-chien', 'chien-pao', 'ting-lu', 'chi-yu', 'red-striped', 'blue-striped', 'white-striped', 'ash-greninja', 'three-segment'];
   const otherHyphenatedNames = ['jangmo-o', 'hakamo-o', 'kommo-o'];
   const formes = ['deoxys', 'giratina', 'shaymin', 'tornadus', 'thundurus', 'landorus', 'meloetta', 'aegislash', 'zygarde', 'enamorus', 'dialga', 'palkia'];
   const forms = ['basculin', 'keldeo', 'lycanroc', 'minior', 'mimikyu', 'toxtricity', 'castform', 'wishiwashi', 'cramorant', 'dudunsparce', 'palafin', 'tatsugiri', 'gimmighoul'];
@@ -10,7 +10,7 @@ export const parseName = name => {
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
   const abilities = ['battle-bond', 'own-tempo'];
-  const otherForms = ['dada', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'bloodmoon', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
+  const otherForms = ['plant-cloak', 'sandy-cloak', 'eternal-flower', 'original-color', 'hero-of-many-battles', 'crowned-sword', 'dada', 'starter', 'ice-rider', 'shadow-rider', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'bloodmoon', 'teal-mask', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
 
   const simpleParse = (string) => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -20,7 +20,7 @@ export const parseName = name => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
   }
 
-  parsedName.print = () => {
+  const printFullName = () => {
     let printName = '';
 
     // Mega
@@ -133,7 +133,54 @@ export const parseName = name => {
     const foundOtherHyphenatedName = otherHyphenatedNames.find(hyphenatedName => originalName.includes(hyphenatedName));
     if (foundOtherHyphenatedName) {
       printName = printName.replace(' ', '-');
-      printName = printName.replace(/-(.)/g, function(match, p1) {
+      printName = printName.replace(/-(.)/g, (match, p1) => {
+        return '-' + p1.toLowerCase();
+      });
+    }
+
+    // Other
+    if (printName.includes('Of')) {
+      printName = printName.replace('Of', 'of');
+    }
+
+    return printName;
+  }
+
+  const printBaseName = () => {
+    let printName = '';
+    const hyphenName = name.replace(' ', '-').toLowerCase();
+
+    // Primal
+    if (parsedName.primal) {
+      printName += 'Primal ';
+    }
+
+    // Mega
+    if (parsedName.mega) {
+      printName += 'Mega ';
+    }
+
+    printName += simpleParse(name);
+
+    // Mega X/Y
+    if (parsedName?.mega?.length === 6) {
+      printName += ' ' + parsedName.mega.charAt(5);
+    }
+
+    // Gigantamax
+    if (parsedName.gmax) {
+      printName = 'Gigantamax ' + printName;
+    }
+
+    // Hyphenated
+    const foundHyphenatedName = hyphenatedNames.find(hyphenatedName => hyphenName.includes(hyphenatedName));
+    if (foundHyphenatedName) {
+      printName = printName.replace(simpleParse(foundHyphenatedName), hyphenatedParse(foundHyphenatedName));
+    }
+    const foundOtherHyphenatedName = otherHyphenatedNames.find(hyphenatedName => hyphenName.includes(hyphenatedName));
+    if (foundOtherHyphenatedName) {
+      printName = printName.replace(' ', '-');
+      printName = printName.replace(/-(.)/g, (match, p1) => {
         return '-' + p1.toLowerCase();
       });
     }
@@ -142,7 +189,7 @@ export const parseName = name => {
   }
 
   // Special cases
-  if (name.includes('nidoran')) {
+  if (name === 'nidoran') {
     if (name[name.length - 1] === 'm') {
       name = 'nidoran♂';
     }
@@ -156,9 +203,11 @@ export const parseName = name => {
   if (name.includes('jr')) {
     name = name.replace('jr', 'jr.');
   }
+  if (name === 'castform') {
+    name += '-normal';
+  }
   if (name.includes('wormadam')) {
-    parsedName.cloak = name.split('-')[1];
-    name = 'wormadam';
+    name += '-cloak';
   }
   if (name.includes('flabebe')) {
     name = name.replace('flabebe', 'flabébé');
@@ -174,8 +223,8 @@ export const parseName = name => {
     name = splitName[0];
     parsedName.rotom = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
-  if (name.includes('floette-eternal')) {
-    name = name.replace('floette-eternal', 'floette-(Eternal-flower)');
+  if (name === 'floette-eternal') {
+    name += '-flower';
   }
   if (name.includes('-phd')) {
     name = name.replace('-phd', ', Ph.D');
@@ -190,7 +239,7 @@ export const parseName = name => {
     name = 'ash-' + name.replace('-ash', '');
   }
   if (name.includes('magearna-original')) {
-    name = name.replace('magearna-original', 'magearna-(Original Color)');
+    name += '-color';
   }
   if (name.includes('necrozma')) {
     if (name === 'necrozma-dusk') {
@@ -203,15 +252,12 @@ export const parseName = name => {
       name = 'ultra-necrozma';
     }
   }
-  if (name.includes('-starter')) {
-    name = name.replace('-starter', '-(Starter)');
-  }
   if (name.includes('zacian') || name.includes('zamazenta')) {
-    if (name.includes('-crowned')) {
-      name = name.replace('-crowned', ' (Crowned Sword)');
+    if (name === 'zacian' || name === 'zamazenta') {
+      name += '-hero-of-many-battles';
     }
     else {
-      name = name + ' (Hero of Many Battles)';
+      name += '-sword';
     }
   }
   if (name.includes('eternatus-eternamax')) {
@@ -219,10 +265,10 @@ export const parseName = name => {
   }
   if (name.includes('calyrex')) {
     if (name.includes('-ice')) {
-      name = name.replace('-ice', ' (Ice Rider)');
+      name = name.replace('-ice', '-ice-rider');
     }
     else if (name.includes('-shadow')) {
-      name = name.replace('-shadow', ' (Shadow Rider)');
+      name = name.replace('-shadow', '-shadow-rider');
     }
   }
   if (name === 'palafin') {
@@ -230,10 +276,7 @@ export const parseName = name => {
   }
   if (name.includes('maushold')) {
     if (name === 'maushold') {
-      name = 'Maushold (Family of Four)';
-    }
-    else {
-      name = 'Maushold (Family of Three)';
+      name += '-family-of-four';
     }
   }
   if (name === 'tatsugiri') {
@@ -241,6 +284,12 @@ export const parseName = name => {
   }
   if (name === 'squawkabilly') {
     name += '-green-plumage';
+  }
+  if (name === 'gimmighoul') {
+    name += '-chest';
+  }
+  if (name === 'ogerpon') {
+    name += '-teal-mask';
   }
 
   // Region
@@ -384,5 +433,8 @@ export const parseName = name => {
     name = name.replace(foundOtherForm, '');
   }
   
-  return parsedName.print();
+  return {
+    fullName: printFullName(),
+    baseName: printBaseName()
+  }
 }
