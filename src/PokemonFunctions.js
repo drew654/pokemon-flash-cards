@@ -9,8 +9,9 @@ export const parseName = name => {
   const styles = ['oricorio', 'urshifu'];
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
-  const abilities = ['battle-bond', 'own-tempo'];
-  const otherForms = ['plant-cloak', 'sandy-cloak', 'eternal-flower', 'original-color', 'hero-of-many-battles', 'crowned-sword', 'dada', 'starter', 'ice-rider', 'shadow-rider', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'bloodmoon', 'teal-mask', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
+  const otherForms = ['plant-cloak', 'sandy-cloak', 'trash-cloak', 'eternal-flower', 'original-color', 'hero-of-many-battles', 'crowned-sword', 'dada', 'starter', 'ice-rider', 'shadow-rider', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'teal-mask', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
+  const prefixes = ['heat', 'wash', 'frost', 'fan', 'mow', 'black', 'white', 'cosplay', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap', 'partner-cap', 'world-cap', 'battle-bond', 'own-tempo', 'totem', 'bloodmoon'];
+  const suffixes = ['rock-star', 'belle', 'pop-star', 'phd', 'libre', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap'];
 
   const simpleParse = (string) => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -21,7 +22,7 @@ export const parseName = name => {
   }
 
   const printFullName = () => {
-    let printName = '';
+    let printName = parsedName.prefix ? parsedName.prefix + ' ' : '';
 
     // Mega
     if (parsedName.mega) {
@@ -95,11 +96,6 @@ export const parseName = name => {
       printName += ' (' + parsedName.mode.charAt(0).toUpperCase() + parsedName.mode.slice(1) + ' Mode)';
     }
 
-    // Rotom
-    if (parsedName?.rotom) {
-      printName = parsedName.rotom + ' ' + printName;
-    }
-
     // Color
     if (parsedName?.color) {
       printName = parsedName.color + ' ' + printName;
@@ -110,19 +106,14 @@ export const parseName = name => {
       printName = parsedName.region + ' ' + printName;
     }
 
-    // Totem
-    if (parsedName?.totem) {
-      printName += ' (Totem)';
-    }
-
-    // Ability
-    if (parsedName?.ability) {
-      printName += ' (' + parsedName.ability + ')';
-    }
-
     // Other forms
     if (parsedName?.otherForm) {
       printName += ' (' + parsedName.otherForm + ')';
+    }
+
+    // Suffix
+    if (parsedName?.suffix) {
+      printName += ' ' + parsedName.suffix;
     }
 
     // Hyphenated
@@ -141,6 +132,9 @@ export const parseName = name => {
     // Other
     if (printName.includes('Of')) {
       printName = printName.replace('Of', 'of');
+    }
+    if (printName.includes(' Phd')) {
+      printName = printName.replace(' Phd', ', Ph.D');
     }
 
     return printName;
@@ -188,6 +182,22 @@ export const parseName = name => {
     return printName;
   }
 
+  const printPrefix = () => {
+    let printName = '';
+    printName += parsedName.region ? parsedName.region + ' ' : '';
+    printName += parsedName.prefix ? parsedName.prefix + ' ' : '';
+
+    // Other
+    if (printName.includes('Of')) {
+      printName = printName.replace('Of', 'of');
+    }
+    if (printName.includes(' Phd')) {
+      printName = printName.replace(' Phd', ', Ph.D');
+    }
+
+    return printName;
+  }
+
   // Special cases
   if (name === 'nidoran') {
     if (name[name.length - 1] === 'm') {
@@ -196,6 +206,9 @@ export const parseName = name => {
     else {
       name = 'nidoran♀';
     }
+  }
+  if (name.includes('farfetchd')) {
+    name = name.replace('farfetchd', 'farfetch\'d');
   }
   if (name.includes('mr')) {
     name = name.replace('mr', 'mr.');
@@ -215,25 +228,16 @@ export const parseName = name => {
   if (name.includes('zygarde')) {
     name = name.replace('0', '0%');
   }
+  if (name.includes('minior')) {
+    if (!name.includes('meteor')) {
+      name += '-core';
+    }
+  }
   if (name.includes('type-null')) {
     name = name.replace('type-null', 'type:-null');
   }
-  if (name.includes('rotom')) {
-    const splitName = name.split('-');
-    name = splitName[0];
-    parsedName.rotom = splitName.filter(word => word !== name).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
   if (name === 'floette-eternal') {
     name += '-flower';
-  }
-  if (name.includes('-phd')) {
-    name = name.replace('-phd', ', Ph.D');
-  }
-  if (name.includes('-cosplay')) {
-    name = 'cosplay-' + name.replace('-cosplay', '');
-  }
-  if (name.includes('-cap')) {
-    name = name.replace('pikachu-', '') + '-pikachu';
   }
   if (name.includes('-ash')) {
     name = 'ash-' + name.replace('-ash', '');
@@ -292,6 +296,20 @@ export const parseName = name => {
     name += '-teal-mask';
   }
 
+  // Prefix
+  const foundPrefix = prefixes.find(prefix => name.includes(prefix));
+  if (foundPrefix) {
+    parsedName.prefix = simpleParse(foundPrefix);
+    name = name.replace('-' + foundPrefix, '');
+  }
+
+  // Suffix
+  const foundSuffix = suffixes.find(suffix => name.includes(suffix));
+  if (foundSuffix) {
+    parsedName.suffix = simpleParse(foundSuffix);
+    name = name.replace('-' + foundSuffix, '');
+  }
+
   // Region
   if (name.includes('-alola')) {
     name = name.replace('-alola', '');
@@ -308,12 +326,6 @@ export const parseName = name => {
   else if (name.includes('-paldea')) {
     name = name.replace('-paldea', '');
     parsedName.region = 'Paldean';
-  }
-
-  // Totem
-  if (name.includes('-totem')) {
-    name = name.replace('-totem', '');
-    parsedName.totem = true;
   }
     
   // Mega (X/Y)
@@ -354,13 +366,6 @@ export const parseName = name => {
     const pokemonWithTheForm = forms.concat(formes).find(form => name.includes(form));
     parsedName.form = name.replace(pokemonWithTheForm + '-', '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     name = pokemonWithTheForm;
-  }
-
-  // Abilities
-  let foundAbility = abilities.find(ability => name.includes(ability));
-  if (foundAbility) {
-    parsedName.ability = foundAbility.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    name = name.replace(foundAbility, '');
   }
 
   // Gender
@@ -435,6 +440,7 @@ export const parseName = name => {
   
   return {
     fullName: printFullName(),
-    baseName: printBaseName()
+    baseName: printBaseName(),
+    prefix: printPrefix(),
   }
 }

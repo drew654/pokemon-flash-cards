@@ -42,6 +42,7 @@ const PokeAPIDebug = () => {
           <tr>
             <th>Parsed Name</th>
             <th>API Name</th>
+            <th>Prefix</th>
             <th>Base Name</th>
             <th>Picture</th>
           </tr>
@@ -51,6 +52,7 @@ const PokeAPIDebug = () => {
             <tr key={pokemon.name}>
               <td style={{ border: '1px solid' }}>{parseName(pokemon.name).fullName}</td>
               <td style={{ border: '1px solid' }}>{pokemon.name}</td>
+              <td style={{ border: '1px solid' }}>{parseName(pokemon.name).prefix}</td>
               <td style={{ border: '1px solid' }}>{parseName(pokemon.name).baseName}</td>
               <td style={{ border: '1px solid' }}>
                 <img src={pokemon.img} alt={pokemon.name} />

@@ -11,6 +11,7 @@ const App = () => {
     <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<PokemonFlashCards />} />
+        <Route path="/pokeapi-debug" element={<PokeAPIDebug />} />
       </Routes>
     </BrowserRouter>
   );
