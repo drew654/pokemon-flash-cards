@@ -1,6 +1,6 @@
 export const simpleParse = (string) => {
   return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
+};
 
 export const parseName = name => {
   if (!name) {
@@ -489,4 +489,4 @@ export const parseName = name => {
     prefix: printPrefix(),
     suffix: printSuffix()
   }
-}
+};
