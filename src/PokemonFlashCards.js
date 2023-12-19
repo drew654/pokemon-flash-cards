@@ -94,7 +94,7 @@ const PokemonFlashCards = () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
     const pokemonName = pokemons[randomIndex];
     const pokemonData = await P.getPokemonByName(pokemonName);
-    return { name: pokemonName, image: pokemonData.sprites.front_default, types: pokemonData.types.map((type) => type.type.name) };
+    return { name: pokemonName, image: pokemonData.sprites.front_default ?? undefined, types: pokemonData.types.map((type) => type.type.name) };
   };
 
   const getRandomPokemonWithImage = async () => {
@@ -157,7 +157,7 @@ const PokemonFlashCards = () => {
           <h1
             style={{
               margin: '0rem',
-              fontSize: '2rem',
+              fontSize: '1.9rem',
             }}
           >
             {parseName(currentPokemon?.name)?.baseName ?? ' '}
