@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { parseName, simpleParse } from './PokemonFunctions';
+import { simpleParse } from './PokemonFunctions';
 import { types } from './PokeAPIAdapter.js';
+import { PokemonNameHeader, StartButton } from './FlashCardComponents.js';
 
 const WhatTypeIsIt = ( {P, colors} ) => {
   const [gameState, setGameState] = useState('waiting to start');
@@ -9,60 +10,57 @@ const WhatTypeIsIt = ( {P, colors} ) => {
   const [typeSelection, setTypeSelection] = useState([]);
   const { secondaryColor, primaryColor, successColor, failureColor, deslectedColor } = colors;
 
-  const TypeButton = (type) => (
-    <div>
-      {gameState === 'showing pokemon' && (
-        <div
-          key={type.id}
-          style={{
-            textAlign: 'center',
-            border: 'solid',
-            padding: '0.1em',
-            margin: '0.1em',
-            cursor: 'pointer',
-            width: '4em',
-            maxWidth: '25vw',
-            fontSize: '0.75em',
-            color: 'white',
-            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
-            borderRadius: '0.5em',
-            borderWidth: '0.2em',
-          }}
-          onClick={() => {
-            if (!typeSelection.includes(type.name)) {
-              const newTypeSelection = [...typeSelection, type.name];
-              setTypeSelection(newTypeSelection);
-              CheckWinCondition(newTypeSelection);
-            }
-          }}
-        >
-          {simpleParse(type.name)}
-        </div>
-      )}
-      {gameState === 'all types selected' && (
-        <div
-          key={type.id}
-          style={{
-            textAlign: 'center',
-            border: 'solid',
-            padding: '0.1em',
-            margin: '0.1em',
-            width: '4em',
-            maxWidth: '25vw',
-            fontSize: '0.75em',
-            color: 'white',
-            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
-            backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
-            borderRadius: '0.5em',
-            borderWidth: '0.2em',
-          }}
-        >
-          {simpleParse(type.name)}
-        </div>
-      )}
-    </div>
-  );
+  const TypeButton = (type) => {
+    const basicStyle = {
+      textAlign: 'center',
+      border: 'solid',
+      padding: '0.1em',
+      margin: '0.1em',
+      cursor: 'pointer',
+      width: '4em',
+      maxWidth: '25vw',
+      fontSize: '0.75em',
+      color: 'white',
+      borderRadius: '0.5em',
+      borderWidth: '0.2em',
+    }
+    
+    return (
+      <div>
+        {gameState === 'showing pokemon' && (
+          <div
+            key={type.id}
+            style={{
+              ...basicStyle,
+              borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
+              backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
+            }}
+            onClick={() => {
+              if (!typeSelection.includes(type.name)) {
+                const newTypeSelection = [...typeSelection, type.name];
+                setTypeSelection(newTypeSelection);
+                CheckWinCondition(newTypeSelection);
+              }
+            }}
+          >
+            {simpleParse(type.name)}
+          </div>
+        )}
+        {gameState === 'all types selected' && (
+          <div
+            key={type.id}
+            style={{
+              ...basicStyle,
+              borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
+              backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
+            }}
+          >
+            {simpleParse(type.name)}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const getRandomPokemon = async () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
@@ -99,8 +97,6 @@ const WhatTypeIsIt = ( {P, colors} ) => {
 
   return (
     <div style={{
-      display: gameState === 'waiting to start' ? 'flex' : '',
-      alignItems: gameState === 'waiting to start' ? 'center' : '',
       justifyContent: 'center',
       height: '100vh',
       backgroundColor: primaryColor,
@@ -108,23 +104,27 @@ const WhatTypeIsIt = ( {P, colors} ) => {
       userSelect: 'none',
     }}>
       {gameState === 'waiting to start' && (
-        <div
-          onClick={() => {
-            setGameState('showing pokemon');
-            getRandomPokemonWithImage(P, pokemons).then((pokemon) => setCurrentPokemon(pokemon));
-          }}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '4em',
-            width: '10em',
-            fontSize: '2rem',
-            cursor: 'pointer',
-            borderRadius: '0.5em',
-            border: '2px solid ' + secondaryColor,
-          }}
-        >Start</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div>
+            <h1 style={{ fontSize: '2rem', marginTop: '2rem' }}>What Type Is It?</h1>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '75vh',
+            }}
+          >
+            <StartButton
+              onClick={() => {
+                setGameState('showing pokemon');
+                getRandomPokemonWithImage(P, pokemons).then((pokemon) => setCurrentPokemon(pokemon));
+              }}
+              colors={colors}
+            />
+          </div>
+        </div>
       )}
       {(gameState === 'showing pokemon' || gameState === 'all types selected') && (
         <div
@@ -136,31 +136,7 @@ const WhatTypeIsIt = ( {P, colors} ) => {
             fontSize: '2rem',
           }}
         >
-          <h2
-            style={{
-              marginBottom: parseName(currentPokemon?.name)?.prefix ? '0rem' : '2rem',
-              fontSize: '1.5rem',
-            }}
-          >
-            {parseName(currentPokemon?.name)?.prefix ?? ' '}
-          </h2>
-          <h1
-            style={{
-              margin: '0rem',
-              fontSize: '1.9rem',
-            }}
-          >
-            {parseName(currentPokemon?.name)?.baseName ?? ' '}
-          </h1>
-          <h2
-            style={{
-              marginTop: parseName(currentPokemon?.name)?.suffix ? '0rem' : '2rem',
-              marginBottom: '1.5rem',
-              fontSize: '1.5rem',
-            }}
-          >
-            {parseName(currentPokemon?.name)?.suffix ?? ' '}
-          </h2>
+          <PokemonNameHeader pokemon={currentPokemon} />
           <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
           <table>
             <tr>
