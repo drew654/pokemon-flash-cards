@@ -10,7 +10,7 @@ export const parseName = name => {
   const modes = ['darmanitan', 'morpeko'];
   const colors = ['kyurem'];
   const otherForms = ['plant-cloak', 'sandy-cloak', 'trash-cloak', 'eternal-flower', 'original-color', 'hero-of-many-battles', 'crowned-sword', 'dada', 'starter', 'ice-rider', 'shadow-rider', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'teal-mask', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
-  const prefixes = ['heat', 'wash', 'frost', 'fan', 'mow', 'black', 'white', 'cosplay', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap', 'partner-cap', 'world-cap', 'battle-bond', 'own-tempo', 'totem', 'bloodmoon'];
+  const prefixes = ['heat', 'wash', 'frost', 'fan', 'mow', 'cosplay', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap', 'partner-cap', 'world-cap', 'battle-bond', 'own-tempo', 'totem', 'bloodmoon'];
   const suffixes = ['rock-star', 'belle', 'pop-star', 'phd', 'libre', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap'];
 
   const simpleParse = (string) => {
@@ -186,13 +186,53 @@ export const parseName = name => {
     let printName = '';
     printName += parsedName.region ? parsedName.region + ' ' : '';
     printName += parsedName.prefix ? parsedName.prefix + ' ' : '';
+    printName += parsedName.color ? parsedName.color + ' ' : '';
 
     // Other
     if (printName.includes('Of')) {
       printName = printName.replace('Of', 'of');
     }
-    if (printName.includes(' Phd')) {
-      printName = printName.replace(' Phd', ', Ph.D');
+    if (printName.includes('Phd')) {
+      if (printName.includes(' Phd')) {
+        printName = printName.replace(' Phd', ', Ph.D');
+      }
+      else {
+        printName = printName.replace('Phd', 'Ph.D');
+      }
+    }
+
+    return printName;
+  }
+
+  const printSuffix = () => {
+    let printName = '';
+    printName += parsedName.suffix ? parsedName.suffix : '';
+    printName += parsedName.otherForm ? ' (' + parsedName.otherForm + ')' : '';
+    if (parsedName.form) {
+      if (parsedName.formWithAnE) {
+        printName += ' (' + parsedName.form + ' Forme)';
+      }
+      else {
+        printName += ' (' + parsedName.form + ' Form)';
+      }
+    }
+    printName += parsedName.size ? ' (' + parsedName.size.charAt(0).toUpperCase() + parsedName.size.slice(1) + ' Size)' : '';
+    printName += parsedName.mode ? ' (' + parsedName.mode.charAt(0).toUpperCase() + parsedName.mode.slice(1) + ' Mode)' : '';
+    printName += parsedName.style ? ' (' + parsedName.style + ' Style)' : '';
+    printName += parsedName.male ? ' (Male)' : '';
+    printName += parsedName.female ? ' (Female)' : '';
+    
+    // Other
+    if (printName.includes('Of')) {
+      printName = printName.replace('Of', 'of');
+    }
+    if (printName.includes('Phd')) {
+      if (printName.includes(' Phd')) {
+        printName = printName.replace(' Phd', ', Ph.D');
+      }
+      else {
+        printName = printName.replace('Phd', 'Ph.D');
+      }
     }
 
     return printName;
@@ -297,14 +337,14 @@ export const parseName = name => {
   }
 
   // Prefix
-  const foundPrefix = prefixes.find(prefix => name.includes(prefix));
+  const foundPrefix = prefixes.find(prefix => name.includes('-' + prefix));
   if (foundPrefix) {
     parsedName.prefix = simpleParse(foundPrefix);
     name = name.replace('-' + foundPrefix, '');
   }
 
   // Suffix
-  const foundSuffix = suffixes.find(suffix => name.includes(suffix));
+  const foundSuffix = suffixes.find(suffix => name.includes('-' + suffix));
   if (foundSuffix) {
     parsedName.suffix = simpleParse(foundSuffix);
     name = name.replace('-' + foundSuffix, '');
@@ -345,7 +385,7 @@ export const parseName = name => {
   }
 
   // Primal
-  if (name.includes('primal')) {
+  if (name.includes('-primal')) {
     parsedName.primal = true;
     name = name.replace('-primal', '');
   }
@@ -363,9 +403,11 @@ export const parseName = name => {
 
   // Forms 
   if (forms.concat(formes).some(form => name.includes(form))) {
-    const pokemonWithTheForm = forms.concat(formes).find(form => name.includes(form));
-    parsedName.form = name.replace(pokemonWithTheForm + '-', '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    name = pokemonWithTheForm;
+    if (name.includes('-')) {
+      const pokemonWithTheForm = forms.concat(formes).find(form => name.includes(form));
+      parsedName.form = name.replace(pokemonWithTheForm + '-', '').split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      name = pokemonWithTheForm;
+    }
   }
 
   // Gender
@@ -442,5 +484,6 @@ export const parseName = name => {
     fullName: printFullName(),
     baseName: printBaseName(),
     prefix: printPrefix(),
+    suffix: printSuffix()
   }
 }
