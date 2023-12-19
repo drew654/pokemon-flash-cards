@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { parseName } from './PokemonFunctions';
+import { parseName, simpleParse } from './PokemonFunctions';
 import { types } from './PokeAPIAdapter.js';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
@@ -38,7 +38,6 @@ const PokemonFlashCards = () => {
             backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
             borderRadius: '0.5em',
             borderWidth: '0.2em',
-            userSelect: 'none',
           }}
           onClick={() => {
             if (!typeSelection.includes(type.name)) {
@@ -48,7 +47,7 @@ const PokemonFlashCards = () => {
             }
           }}
         >
-          {parseName(type.name)}
+          {simpleParse(type.name)}
         </div>
       )}
       {gameState === 'all types selected' && (
@@ -67,10 +66,9 @@ const PokemonFlashCards = () => {
             backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
             borderRadius: '0.5em',
             borderWidth: '0.2em',
-            userSelect: 'none',
           }}
         >
-          {parseName(type.name)}
+          {simpleParse(type.name)}
         </div>
       )}
     </div>
@@ -96,8 +94,18 @@ const PokemonFlashCards = () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
     const pokemonName = pokemons[randomIndex];
     const pokemonData = await P.getPokemonByName(pokemonName);
-    return { name: pokemonName, image: pokemonData.sprites.front_default, types: pokemonData.types.map((type) => type.type.name) };
+    return { name: pokemonName, image: pokemonData.sprites.front_default ?? undefined, types: pokemonData.types.map((type) => type.type.name) };
   };
+
+  const getRandomPokemonWithImage = async () => {
+    const pokemon = await getRandomPokemon();
+    if (!pokemon.image) {
+      return getRandomPokemonWithImage();
+    }
+    else {
+      return pokemon;
+    }
+  }
 
   return (
     <div style={{
@@ -107,12 +115,13 @@ const PokemonFlashCards = () => {
       height: '100vh',
       backgroundColor: primaryColor,
       color: secondaryColor,
+      userSelect: 'none',
     }}>
       {gameState === 'waiting to start' && (
         <div
           onClick={() => {
             setGameState('showing pokemon');
-            getRandomPokemon().then((pokemon) => setCurrentPokemon(pokemon));
+            getRandomPokemonWithImage().then((pokemon) => setCurrentPokemon(pokemon));
           }}
           style={{
             display: 'flex',
@@ -137,16 +146,33 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
-          <h1
+          <h2
             style={{
-              marginBottom: '0em',
-              fontSize: '2rem',
+              marginBottom: parseName(currentPokemon?.name)?.prefix ? '0rem' : '2rem',
+              fontSize: '1.5rem',
             }}
           >
-            {parseName(currentPokemon?.name)}
+            {parseName(currentPokemon?.name)?.prefix ?? ' '}
+          </h2>
+          <h1
+            style={{
+              margin: '0rem',
+              fontSize: '1.9rem',
+            }}
+          >
+            {parseName(currentPokemon?.name)?.baseName ?? ' '}
           </h1>
-            <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
-            <table>
+          <h2
+            style={{
+              marginTop: parseName(currentPokemon?.name)?.suffix ? '0rem' : '2rem',
+              marginBottom: '1.5rem',
+              fontSize: '1.5rem',
+            }}
+          >
+            {parseName(currentPokemon?.name)?.suffix ?? ' '}
+          </h2>
+          <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
+          <table>
             <tr>
               <td>
                 {types.map((type) => (type.id % 3 === 1 && <TypeButton key={type.id} {...type} />))}
