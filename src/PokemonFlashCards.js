@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { parseName } from './PokemonFunctions';
+import { parseName, simpleParse } from './PokemonFunctions';
 import { types } from './PokeAPIAdapter.js';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
@@ -47,7 +47,7 @@ const PokemonFlashCards = () => {
             }
           }}
         >
-          {parseName(type.name)}
+          {simpleParse(type.name)}
         </div>
       )}
       {gameState === 'all types selected' && (
@@ -68,7 +68,7 @@ const PokemonFlashCards = () => {
             borderWidth: '0.2em',
           }}
         >
-          {parseName(type.name)}
+          {simpleParse(type.name)}
         </div>
       )}
     </div>
@@ -146,16 +146,33 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
+          <h2
+            style={{
+              marginBottom: parseName(currentPokemon?.name)?.prefix ? '0rem' : '2rem',
+              fontSize: '1.5rem',
+            }}
+          >
+            {parseName(currentPokemon?.name)?.prefix ?? ' '}
+          </h2>
           <h1
             style={{
-              marginBottom: '0em',
+              margin: '0rem',
               fontSize: '2rem',
             }}
           >
-            {parseName(currentPokemon?.name)}
+            {parseName(currentPokemon?.name)?.baseName ?? ' '}
           </h1>
-            <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
-            <table>
+          <h2
+            style={{
+              marginTop: parseName(currentPokemon?.name)?.suffix ? '0rem' : '2rem',
+              marginBottom: '1.5rem',
+              fontSize: '1.5rem',
+            }}
+          >
+            {parseName(currentPokemon?.name)?.suffix ?? ' '}
+          </h2>
+          <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
+          <table>
             <tr>
               <td>
                 {types.map((type) => (type.id % 3 === 1 && <TypeButton key={type.id} {...type} />))}

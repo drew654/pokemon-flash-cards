@@ -1,4 +1,11 @@
+export const simpleParse = (string) => {
+  return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 export const parseName = name => {
+  if (!name) {
+    return undefined;
+  }
   const parsedName = {};
   const originalName = name;
 
@@ -12,10 +19,6 @@ export const parseName = name => {
   const otherForms = ['plant-cloak', 'sandy-cloak', 'trash-cloak', 'eternal-flower', 'original-color', 'hero-of-many-battles', 'crowned-sword', 'dada', 'starter', 'ice-rider', 'shadow-rider', 'combat-breed', 'blaze-breed', 'aqua-breed', 'family-of-three', 'family-of-four', 'green-plumage', 'blue-plumage', 'yellow-plumage', 'white-plumage', 'limited-build', 'sprinting-build', 'swimming-build', 'gliding-build', 'low-power-mode', 'drive-mode', 'aquatic-mode', 'glide-mode', 'teal-mask', 'wellspring-mask', 'hearthflame-mask', 'cornerstone-mask'];
   const prefixes = ['heat', 'wash', 'frost', 'fan', 'mow', 'cosplay', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap', 'partner-cap', 'world-cap', 'battle-bond', 'own-tempo', 'totem', 'bloodmoon'];
   const suffixes = ['rock-star', 'belle', 'pop-star', 'phd', 'libre', 'original-cap', 'hoenn-cap', 'sinnoh-cap', 'unova-cap', 'kalos-cap', 'alola-cap'];
-
-  const simpleParse = (string) => {
-    return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
 
   const hyphenatedParse = (string) => {
     return string.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
