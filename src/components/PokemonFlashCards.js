@@ -188,6 +188,7 @@ const PokemonFlashCards = () => {
               style={{
                 margin: "1.5rem",
                 fontSize: "1.9rem",
+                textAlign: "center",
               }}
             >
               {names?.[currentPokemon?.name] ?? currentPokemon?.name ?? " "}
@@ -195,7 +196,7 @@ const PokemonFlashCards = () => {
             <img
               src={currentPokemon?.image}
               alt={currentPokemon?.name}
-              style={{ width: "5em", height: "5em" }}
+              style={{ width: "5em", height: "5em", paddingBottom: "1em" }}
             />
             <table>
               <tr>
