@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { parseName, simpleParse } from './PokemonFunctions';
-import { types } from './PokeAPIAdapter.js';
+import { types } from '../utilities/types.js';
+import { names } from '../utilities/names.js';
+import { simpleParse } from '../utilities/functions.js';
 const Pokedex = require('pokeapi-js-wrapper');
 const P = new Pokedex.Pokedex();
 
@@ -146,23 +147,23 @@ const PokemonFlashCards = () => {
             fontSize: '2rem',
           }}
         >
-          <h2
+          {/* <h2
             style={{
               marginBottom: parseName(currentPokemon?.name)?.prefix ? '0rem' : '2rem',
               fontSize: '1.5rem',
             }}
           >
             {parseName(currentPokemon?.name)?.prefix ?? ' '}
-          </h2>
+          </h2> */}
           <h1
             style={{
               margin: '0rem',
               fontSize: '1.9rem',
             }}
           >
-            {parseName(currentPokemon?.name)?.baseName ?? ' '}
+            {names?.[currentPokemon?.name] ?? currentPokemon?.name}
           </h1>
-          <h2
+          {/* <h2
             style={{
               marginTop: parseName(currentPokemon?.name)?.suffix ? '0rem' : '2rem',
               marginBottom: '1.5rem',
@@ -170,7 +171,7 @@ const PokemonFlashCards = () => {
             }}
           >
             {parseName(currentPokemon?.name)?.suffix ?? ' '}
-          </h2>
+          </h2> */}
           <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
           <table>
             <tr>
