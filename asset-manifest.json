@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/pokemon-flash-cards/static/css/main.073c9b0a.css",
-    "main.js": "/pokemon-flash-cards/static/js/main.5bcef23e.js",
+    "main.js": "/pokemon-flash-cards/static/js/main.333ee882.js",
     "static/js/787.d38a4e95.chunk.js": "/pokemon-flash-cards/static/js/787.d38a4e95.chunk.js",
     "index.html": "/pokemon-flash-cards/index.html",
     "main.073c9b0a.css.map": "/pokemon-flash-cards/static/css/main.073c9b0a.css.map",
-    "main.5bcef23e.js.map": "/pokemon-flash-cards/static/js/main.5bcef23e.js.map",
+    "main.333ee882.js.map": "/pokemon-flash-cards/static/js/main.333ee882.js.map",
     "787.d38a4e95.chunk.js.map": "/pokemon-flash-cards/static/js/787.d38a4e95.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.5bcef23e.js"
+    "static/js/main.333ee882.js"
   ]
 }
