@@ -134,132 +134,129 @@ const PokemonFlashCards = () => {
   return (
     <div
       style={{
-        display: gameState === "waiting to start" ? "flex" : "",
-        alignItems: gameState === "waiting to start" ? "center" : "",
-        justifyContent: "center",
         height: "100vh",
+        display: gameState === "waiting to start" ? "flex" : "",
+        justifyContent: gameState === "waiting to start" ? "center" : "",
         backgroundColor: primaryColor,
-        color: secondaryColor,
-        userSelect: "none",
       }}
     >
-      {gameState === "waiting to start" && (
-        <div
-          onClick={() => {
-            setGameState("showing pokemon");
-            getRandomPokemonWithImage().then((pokemon) =>
-              setCurrentPokemon(pokemon)
-            );
-          }}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "4em",
-            width: "10em",
-            fontSize: "2rem",
-            cursor: "pointer",
-            borderRadius: "0.5em",
-            border: "2px solid " + secondaryColor,
-          }}
-        >
-          Start
-        </div>
-      )}
-      {(gameState === "showing pokemon" ||
-        gameState === "all types selected") && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontSize: "2rem",
-          }}
-        >
-          {/* <h2
+      <div
+        style={{
+          display: gameState === "waiting to start" ? "flex" : "",
+          alignItems: gameState === "waiting to start" ? "center" : "",
+          justifyContent: "center",
+          backgroundColor: primaryColor,
+          color: secondaryColor,
+          userSelect: "none",
+        }}
+      >
+        {gameState === "waiting to start" && (
+          <div
+            onClick={() => {
+              setGameState("showing pokemon");
+              getRandomPokemonWithImage().then((pokemon) =>
+                setCurrentPokemon(pokemon)
+              );
+            }}
             style={{
-              marginBottom: parseName(currentPokemon?.name)?.prefix ? '0rem' : '2rem',
-              fontSize: '1.5rem',
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "4em",
+              width: "10em",
+              fontSize: "2rem",
+              cursor: "pointer",
+              borderRadius: "0.5em",
+              border: "2px solid " + secondaryColor,
             }}
           >
-            {parseName(currentPokemon?.name)?.prefix ?? ' '}
-          </h2> */}
-          <h1
+            Start
+          </div>
+        )}
+        {(gameState === "showing pokemon" ||
+          gameState === "all types selected") && (
+          <div
             style={{
-              margin: "0rem",
-              fontSize: "1.9rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: "2rem",
             }}
           >
-            {names?.[currentPokemon?.name] ?? currentPokemon?.name}
-          </h1>
-          {/* <h2
-            style={{
-              marginTop: parseName(currentPokemon?.name)?.suffix ? '0rem' : '2rem',
-              marginBottom: '1.5rem',
-              fontSize: '1.5rem',
-            }}
-          >
-            {parseName(currentPokemon?.name)?.suffix ?? ' '}
-          </h2> */}
-          <img
-            src={currentPokemon?.image}
-            alt={currentPokemon?.name}
-            style={{ width: "5em", height: "5em" }}
-          />
-          <table>
-            <tr>
-              <td>
-                {types.map(
-                  (type) =>
-                    type.id % 3 === 1 && <TypeButton key={type.id} {...type} />
-                )}
-              </td>
-              <td>
-                {types.map(
-                  (type) =>
-                    type.id % 3 === 2 && <TypeButton key={type.id} {...type} />
-                )}
-              </td>
-              <td>
-                {types.map(
-                  (type) =>
-                    type.id % 3 === 0 && <TypeButton key={type.id} {...type} />
-                )}
-              </td>
-            </tr>
-          </table>
-          {gameState === "all types selected" && (
-            <div>
-              <div
-                onClick={() => {
-                  setGameState("showing pokemon");
-                  getRandomPokemon().then((pokemon) =>
-                    setCurrentPokemon(pokemon)
-                  );
-                  setTypeSelection([]);
-                }}
-                style={{
-                  marginTop: "0.5em",
-                  padding: "0.1em",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "1.4em",
-                  width: "2.5em",
-                  fontSize: "1em",
-                  cursor: "pointer",
-                  backgroundColor: primaryColor,
-                  borderRadius: "0.5em",
-                  border: "2px solid " + secondaryColor,
-                }}
-              >
-                Next
+            <h1
+              style={{
+                margin: "1.5rem",
+                fontSize: "1.9rem",
+              }}
+            >
+              {names?.[currentPokemon?.name] ?? currentPokemon?.name ?? " "}
+            </h1>
+            <img
+              src={currentPokemon?.image}
+              alt={currentPokemon?.name}
+              style={{ width: "5em", height: "5em" }}
+            />
+            <table>
+              <tr>
+                <td>
+                  {types.map(
+                    (type) =>
+                      type.id % 3 === 1 && (
+                        <TypeButton key={type.id} {...type} />
+                      )
+                  )}
+                </td>
+                <td>
+                  {types.map(
+                    (type) =>
+                      type.id % 3 === 2 && (
+                        <TypeButton key={type.id} {...type} />
+                      )
+                  )}
+                </td>
+                <td>
+                  {types.map(
+                    (type) =>
+                      type.id % 3 === 0 && (
+                        <TypeButton key={type.id} {...type} />
+                      )
+                  )}
+                </td>
+              </tr>
+            </table>
+            {gameState === "all types selected" && (
+              <div>
+                <div
+                  onClick={() => {
+                    setGameState("showing pokemon");
+                    getRandomPokemon().then((pokemon) =>
+                      setCurrentPokemon(pokemon)
+                    );
+                    setTypeSelection([]);
+                  }}
+                  style={{
+                    marginTop: "0.5em",
+                    padding: "0.1em",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "1.4em",
+                    width: "2.5em",
+                    fontSize: "1em",
+                    cursor: "pointer",
+                    backgroundColor: primaryColor,
+                    borderRadius: "0.5em",
+                    border: "2px solid " + secondaryColor,
+                  }}
+                >
+                  Next
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
