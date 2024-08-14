@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { names } from '../utilities/names.js';
-const Pokedex = require('pokeapi-js-wrapper');
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { names } from "../utilities/names.js";
+const Pokedex = require("pokeapi-js-wrapper");
 const P = new Pokedex.Pokedex();
 
 const Debug = () => {
@@ -10,11 +10,19 @@ const Debug = () => {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const pokemons = await P.getPokemonsList({ offset: segment * 100, limit: 100 });
-      const updatedPokemons = await Promise.all(pokemons.results.map(async (pokemon) => {
-        const pokemonData = await P.getPokemonByName(pokemon.name);
-        return { name: pokemon.name, img: pokemonData.sprites?.front_default };
-      }));
+      const pokemons = await P.getPokemonsList({
+        offset: segment * 100,
+        limit: 100,
+      });
+      const updatedPokemons = await Promise.all(
+        pokemons.results.map(async (pokemon) => {
+          const pokemonData = await P.getPokemonByName(pokemon.name);
+          return {
+            name: pokemon.name,
+            img: pokemonData.sprites?.front_default,
+          };
+        })
+      );
       setPokemons(updatedPokemons);
     };
     fetchPokemons();
@@ -22,7 +30,10 @@ const Debug = () => {
 
   return (
     <div>
-      <select value={segment} onChange={(e) => setSegment(parseInt(e.target.value))}>
+      <select
+        value={segment}
+        onChange={(e) => setSegment(parseInt(e.target.value))}
+      >
         <option value={0}>Segment 1</option>
         <option value={1}>Segment 2</option>
         <option value={2}>Segment 3</option>
@@ -48,9 +59,11 @@ const Debug = () => {
         <tbody>
           {pokemons.map((pokemon) => (
             <tr key={pokemon.name}>
-              <td style={{ border: '1px solid' }}>{pokemon.name}</td>
-              <td style={{ border: '1px solid' }}>{names?.[pokemon.name] ?? pokemon.name}</td>
-              <td style={{ border: '1px solid' }}>
+              <td style={{ border: "1px solid" }}>{pokemon.name}</td>
+              <td style={{ border: "1px solid" }}>
+                {names?.[pokemon.name] ?? pokemon.name}
+              </td>
+              <td style={{ border: "1px solid" }}>
                 <img src={pokemon.img} alt={pokemon.name} />
               </td>
             </tr>
@@ -58,8 +71,7 @@ const Debug = () => {
         </tbody>
       </table>
     </div>
-
   );
-}
+};
 
 export default Debug;

@@ -1,44 +1,54 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { types } from '../utilities/types.js';
-import { names } from '../utilities/names.js';
-import { simpleParse } from '../utilities/functions.js';
-const Pokedex = require('pokeapi-js-wrapper');
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { types } from "../utilities/types.js";
+import { names } from "../utilities/names.js";
+import { simpleParse } from "../utilities/functions.js";
+const Pokedex = require("pokeapi-js-wrapper");
 const P = new Pokedex.Pokedex();
 
 const PokemonFlashCards = () => {
-  const [gameState, setGameState] = useState('waiting to start');
+  const [gameState, setGameState] = useState("waiting to start");
   const [pokemons, setPokemons] = useState([]);
   const [currentPokemon, setCurrentPokemon] = useState(null);
   const [typeSelection, setTypeSelection] = useState([]);
 
-  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const prefersDarkMode =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
   const darkMode = prefersDarkMode ? true : false;
-  const secondaryColor = darkMode ? 'white' : 'black';
-  const primaryColor = darkMode ? 'black' : 'white';
-  const successColor = 'green';
-  const failureColor = 'red';
-  const deslectedColor = 'gray';
+  const secondaryColor = darkMode ? "white" : "black";
+  const primaryColor = darkMode ? "black" : "white";
+  const successColor = "green";
+  const failureColor = "red";
+  const deslectedColor = "gray";
 
   const TypeButton = (type) => (
     <div>
-      {gameState === 'showing pokemon' && (
+      {gameState === "showing pokemon" && (
         <div
           key={type.id}
           style={{
-            textAlign: 'center',
-            border: 'solid',
-            padding: '0.1em',
-            margin: '0.1em',
-            cursor: 'pointer',
-            width: '4em',
-            maxWidth: '25vw',
-            fontSize: '0.75em',
-            color: 'white',
-            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
-            backgroundColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? type.color : deslectedColor) : type.color,
-            borderRadius: '0.5em',
-            borderWidth: '0.2em',
+            textAlign: "center",
+            border: "solid",
+            padding: "0.1em",
+            margin: "0.1em",
+            cursor: "pointer",
+            width: "4em",
+            maxWidth: "25vw",
+            fontSize: "0.75em",
+            color: "white",
+            borderColor: typeSelection.includes(type.name)
+              ? currentPokemon?.types.includes(type.name)
+                ? successColor
+                : failureColor
+              : primaryColor,
+            backgroundColor: typeSelection.includes(type.name)
+              ? currentPokemon?.types.includes(type.name)
+                ? type.color
+                : deslectedColor
+              : type.color,
+            borderRadius: "0.5em",
+            borderWidth: "0.2em",
           }}
           onClick={() => {
             if (!typeSelection.includes(type.name)) {
@@ -51,22 +61,30 @@ const PokemonFlashCards = () => {
           {simpleParse(type.name)}
         </div>
       )}
-      {gameState === 'all types selected' && (
+      {gameState === "all types selected" && (
         <div
           key={type.id}
           style={{
-            textAlign: 'center',
-            border: 'solid',
-            padding: '0.1em',
-            margin: '0.1em',
-            width: '4em',
-            maxWidth: '25vw',
-            fontSize: '0.75em',
-            color: 'white',
-            borderColor: typeSelection.includes(type.name) ? (currentPokemon?.types.includes(type.name) ? successColor : failureColor) : primaryColor,
-            backgroundColor: typeSelection.includes(type.name) && currentPokemon?.types.includes(type.name) ? type.color : deslectedColor,
-            borderRadius: '0.5em',
-            borderWidth: '0.2em',
+            textAlign: "center",
+            border: "solid",
+            padding: "0.1em",
+            margin: "0.1em",
+            width: "4em",
+            maxWidth: "25vw",
+            fontSize: "0.75em",
+            color: "white",
+            borderColor: typeSelection.includes(type.name)
+              ? currentPokemon?.types.includes(type.name)
+                ? successColor
+                : failureColor
+              : primaryColor,
+            backgroundColor:
+              typeSelection.includes(type.name) &&
+              currentPokemon?.types.includes(type.name)
+                ? type.color
+                : deslectedColor,
+            borderRadius: "0.5em",
+            borderWidth: "0.2em",
           }}
         >
           {simpleParse(type.name)}
@@ -76,10 +94,12 @@ const PokemonFlashCards = () => {
   );
 
   const CheckWinCondition = (newTypeSelection) => {
-    if (currentPokemon?.types.every((type) => newTypeSelection.includes(type))) {
-      setGameState('all types selected');
+    if (
+      currentPokemon?.types.every((type) => newTypeSelection.includes(type))
+    ) {
+      setGameState("all types selected");
     }
-  }
+  };
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -95,56 +115,66 @@ const PokemonFlashCards = () => {
     const randomIndex = Math.floor(Math.random() * pokemons.length);
     const pokemonName = pokemons[randomIndex];
     const pokemonData = await P.getPokemonByName(pokemonName);
-    return { name: pokemonName, image: pokemonData.sprites.front_default ?? undefined, types: pokemonData.types.map((type) => type.type.name) };
+    return {
+      name: pokemonName,
+      image: pokemonData.sprites.front_default ?? undefined,
+      types: pokemonData.types.map((type) => type.type.name),
+    };
   };
 
   const getRandomPokemonWithImage = async () => {
     const pokemon = await getRandomPokemon();
     if (!pokemon.image) {
       return getRandomPokemonWithImage();
-    }
-    else {
+    } else {
       return pokemon;
     }
-  }
+  };
 
   return (
-    <div style={{
-      display: gameState === 'waiting to start' ? 'flex' : '',
-      alignItems: gameState === 'waiting to start' ? 'center' : '',
-      justifyContent: 'center',
-      height: '100vh',
-      backgroundColor: primaryColor,
-      color: secondaryColor,
-      userSelect: 'none',
-    }}>
-      {gameState === 'waiting to start' && (
+    <div
+      style={{
+        display: gameState === "waiting to start" ? "flex" : "",
+        alignItems: gameState === "waiting to start" ? "center" : "",
+        justifyContent: "center",
+        height: "100vh",
+        backgroundColor: primaryColor,
+        color: secondaryColor,
+        userSelect: "none",
+      }}
+    >
+      {gameState === "waiting to start" && (
         <div
           onClick={() => {
-            setGameState('showing pokemon');
-            getRandomPokemonWithImage().then((pokemon) => setCurrentPokemon(pokemon));
+            setGameState("showing pokemon");
+            getRandomPokemonWithImage().then((pokemon) =>
+              setCurrentPokemon(pokemon)
+            );
           }}
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '4em',
-            width: '10em',
-            fontSize: '2rem',
-            cursor: 'pointer',
-            borderRadius: '0.5em',
-            border: '2px solid ' + secondaryColor,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "4em",
+            width: "10em",
+            fontSize: "2rem",
+            cursor: "pointer",
+            borderRadius: "0.5em",
+            border: "2px solid " + secondaryColor,
           }}
-        >Start</div>
+        >
+          Start
+        </div>
       )}
-      {(gameState === 'showing pokemon' || gameState === 'all types selected') && (
+      {(gameState === "showing pokemon" ||
+        gameState === "all types selected") && (
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: '2rem',
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontSize: "2rem",
           }}
         >
           {/* <h2
@@ -157,8 +187,8 @@ const PokemonFlashCards = () => {
           </h2> */}
           <h1
             style={{
-              margin: '0rem',
-              fontSize: '1.9rem',
+              margin: "0rem",
+              fontSize: "1.9rem",
             }}
           >
             {names?.[currentPokemon?.name] ?? currentPokemon?.name}
@@ -172,41 +202,56 @@ const PokemonFlashCards = () => {
           >
             {parseName(currentPokemon?.name)?.suffix ?? ' '}
           </h2> */}
-          <img src={currentPokemon?.image} alt={currentPokemon?.name} style={{ width: '5em', height: '5em' }} />
+          <img
+            src={currentPokemon?.image}
+            alt={currentPokemon?.name}
+            style={{ width: "5em", height: "5em" }}
+          />
           <table>
             <tr>
               <td>
-                {types.map((type) => (type.id % 3 === 1 && <TypeButton key={type.id} {...type} />))}
+                {types.map(
+                  (type) =>
+                    type.id % 3 === 1 && <TypeButton key={type.id} {...type} />
+                )}
               </td>
               <td>
-                {types.map((type) => (type.id % 3 === 2 && <TypeButton key={type.id} {...type} />))}
+                {types.map(
+                  (type) =>
+                    type.id % 3 === 2 && <TypeButton key={type.id} {...type} />
+                )}
               </td>
               <td>
-                {types.map((type) => (type.id % 3 === 0 && <TypeButton key={type.id} {...type} />))}
+                {types.map(
+                  (type) =>
+                    type.id % 3 === 0 && <TypeButton key={type.id} {...type} />
+                )}
               </td>
             </tr>
           </table>
-          {gameState === 'all types selected' && (
+          {gameState === "all types selected" && (
             <div>
               <div
                 onClick={() => {
-                  setGameState('showing pokemon');
-                  getRandomPokemon().then((pokemon) => setCurrentPokemon(pokemon));
+                  setGameState("showing pokemon");
+                  getRandomPokemon().then((pokemon) =>
+                    setCurrentPokemon(pokemon)
+                  );
                   setTypeSelection([]);
                 }}
                 style={{
-                  marginTop: '0.5em',
-                  padding: '0.1em',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '1.4em',
-                  width: '2.5em',
-                  fontSize: '1em',
-                  cursor: 'pointer',
+                  marginTop: "0.5em",
+                  padding: "0.1em",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "1.4em",
+                  width: "2.5em",
+                  fontSize: "1em",
+                  cursor: "pointer",
                   backgroundColor: primaryColor,
-                  borderRadius: '0.5em',
-                  border: '2px solid ' + secondaryColor,
+                  borderRadius: "0.5em",
+                  border: "2px solid " + secondaryColor,
                 }}
               >
                 Next
